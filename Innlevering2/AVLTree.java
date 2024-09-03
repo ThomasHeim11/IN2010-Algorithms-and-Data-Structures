@@ -6,14 +6,16 @@ import java.io.IOException;
 class TreeNode {
     int x;
     TreeNode left, right;
+    int height; //Høyde til noden                                  // <@ ny kode
     
     public TreeNode(int item) {
         x = item;
         left = right = null;
+        height = 1; //Høyden til en ny node er 1.                 // <@ ny kode
     }
 }
 // Oppretter en rot og størrelse. 
-class SetBST {
+class AVLTree {
     private TreeNode root;
     private int size;
     
