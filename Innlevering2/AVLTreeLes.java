@@ -78,20 +78,18 @@ class AVLTree {
 
     // Balanserer en node hvis den er ubalansert.   <@ ny kode @>
     private TreeNode balance(TreeNode v) {
-        int balanceFactor = getBalance(v);
-
-        if (balanceFactor > 1) {
-            if (getBalance(v.left) < 0) {
-                v.left = leftRotate(v.left);
-            }
-            return rightRotate(v);
-        }
-
-        if (balanceFactor < -1) {
+        if (getBalance(v) < -1) {
             if (getBalance(v.right) > 0) {
                 v.right = rightRotate(v.right);
             }
             return leftRotate(v);
+        }
+
+        if (getBalance(v) > 1) {
+            if (getBalance(v.left) < 0) {
+                v.left = leftRotate(v.left);
+            }
+            return rightRotate(v);
         }
 
         return v;

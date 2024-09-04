@@ -106,6 +106,7 @@ class SetBST {
         }
         return minv;
     }
+    //TODO SJEKK OM SET SKAL BORT
     // Henter størrelsen på settet.
     public int size(SetBST set) {
         return size;
