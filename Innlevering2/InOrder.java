@@ -16,7 +16,7 @@ class InOrder{
     public void leggTil(int tall){
         settInn(rot, tall);
     }
-
+    // <@ nytt>
     public void settInn(InOrderNode node, int tall){
         if(rot == null){
             rot = new InOrderNode(tall);
@@ -28,6 +28,7 @@ class InOrder{
                 return;
             }
             settInn(node.venstre,tall);
+            
         }else if(tall > node.tall){
             if(node.høyre == null){
                 node.høyre = new InOrderNode(tall);
