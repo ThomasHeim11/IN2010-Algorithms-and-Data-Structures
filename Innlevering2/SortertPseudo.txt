@@ -1,0 +1,12 @@
+
+ALGORITHM: Skriver ut elementene som resulterer i et balansert søketre. 
+
+Input: En node v. 
+Output: Utfører reksurisv sjekk først på venstre element, så høyre element. 
+
+Inorder(v):
+    if v = null then
+        return
+    inorder(v.left)
+    print(v.element)
+    inorder(v.right)
