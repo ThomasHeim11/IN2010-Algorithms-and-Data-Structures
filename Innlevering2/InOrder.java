@@ -28,11 +28,6 @@ class BalancedBST {
 
         // Rekursivt håndtere venstre sub-array først
         printBalancedOrderHelper(numbers, start, mid - 1);
-        
-
-
-       
-
     }
 }
 
