@@ -1,118 +1,68 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
-class InOrder {
-    private InOrderNode rot = null;
-    private int str = 0;
+// Klasse som håndterer balanserte binære søketrær
+class BalancedBST {
 
-    protected class InOrderNode {
-        protected int tall;
-        protected InOrderNode venstre, høyre;
-
-        public InOrderNode(int tall) {
-            this.tall = tall;
-        }
-
-        @Override
-        public String toString() {
-            return String.valueOf(tall);
-        }
+    // Metode for å skrive ut et balansert binært søketre i post-ordre rekkefølge
+    public static void printBalancedOrder(int[] numbers) {
+        printBalancedOrderHelper(numbers, 0, numbers.length - 1); // Kaller hjelpefunks med start og slutt indekser
     }
 
-    public void leggTil(int tall) {
-        settInn(rot, tall);
-    }
-
-    public void settInn(InOrderNode node, int tall) {
-        if (rot == null) {
-            rot = new InOrderNode(tall);
-            return;
-        }
-        if (tall < node.tall) {
-            if (node.venstre == null) {
-                node.venstre = new InOrderNode(tall);
-                return;
-            }
-            settInn(node.venstre, tall);
-
-        } else if (tall > node.tall) {
-            if (node.høyre == null) {
-                node.høyre = new InOrderNode(tall);
-                return;
-            }
-            settInn(node.høyre, tall);
-        }
-    }
-
-    public void print() {
-        System.out.println("InOrder: ");
-        printInOrder(rot);
-        System.out.println("Preorder: ");
-        printPreOrder(rot);
-        System.out.println("Postorder: ");
-        printPostOrder(rot);
-    }
-
-    public void printInOrder(InOrderNode node) {
-        if (node == null) {
-            return;
-        }
-        printInOrder(node.venstre);
-        System.out.println(node);
-        printInOrder(node.høyre);
-    }
-
-    public void printPreOrder(InOrderNode node) {
-        if (node == null) {
-            return;
-        }
-        System.out.println(node);
-        printPreOrder(node.venstre);
-        printPreOrder(node.høyre);
-    }
-
-    public void printPostOrder(InOrderNode node) {
-        if (node == null) {
-            return;
-        }
-        printPostOrder(node.venstre);
-        printPostOrder(node.høyre);
-        System.out.println(node);
-    }
-
-    public static void main(String[] args) {
-        if (args.length != 1) {
-            System.out.println("Bruk: java InOrder <file path>");
+    // Hjelpefunksjon for å konstruere og skrive ut post-ordre rekkefølge rekursivt
+    private static void printBalancedOrderHelper(int[] numbers, int start, int end) {
+        if (start > end) { // Basis tilfelle for rekursjon, ingen elementer igjen
             return;
         }
 
-        String filePath = args[0];
-        InOrder bst = new InOrder();
+        int mid = (start + end) / 2; // Finn midtpunktet i den nåværende delarrayen
+    
+         // Operere på midtpunktet til slutt
+        System.out.println(numbers[mid]);
 
-        try {
-    List<String> lines = Files.readAllLines(Paths.get(filePath));
-    int lineNumber = 0;
-    for (String line : lines) {
-        lineNumber++;
-        String trimmedLine = line.trim();
-        if (trimmedLine.isEmpty()) {
-            continue; // Ignorerer tomme linjer
-        }
-        try {
-            int number = Integer.parseInt(trimmedLine);
-            bst.leggTil(number);
-        } catch (NumberFormatException e) {
-            // Handle the case where the line is not a valid integer
-            System.err.printf("Invalid number in file at line %d: %s%n", lineNumber, line);
-        }
+        // Rekursivt håndtere høyre sub-array
+        printBalancedOrderHelper(numbers, mid + 1, end);
+
+        // Rekursivt håndtere venstre sub-array først
+        printBalancedOrderHelper(numbers, start, mid - 1);
+        
+
+
+       
+
     }
-} catch (IOException e) {
-    e.printStackTrace();
 }
 
+// Hovedklasse som inneholder main-metoden
+public class InOrder {
 
-        bst.print();
+    public static void main(String[] args) {
+        if (args.length != 1) { // Sjekker om det er oppgitt en fil som argument
+            System.out.println("Usage: java Main <filename>"); // Skriver ut riktig bruksmåte
+            return; // Avslutter programmet
+        }
+
+        String filename = args[0]; // Leser filnavnet fra argumentene
+        List<Integer> numberList = new ArrayList<>(); // Oppretter en liste for å lagre tallene
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filename))) { // Åpner filen for lesing
+            String line;
+            while ((line = br.readLine()) != null) { // Leser linje for linje fra filen
+                line = line.trim(); // Fjerner eventuelle mellomrom fra starten og slutten av linjen
+                if (!line.isEmpty()) { // Sjekker om linjen ikke er tom
+                    numberList.add(Integer.parseInt(line)); // Konverterer linjen til et heltall og legger det til i listen
+                }
+            }
+        } catch (IOException e) { // Fanger opp eventuelle IOExceptions som kan oppstå
+            e.printStackTrace(); // Skriver ut stacktrace for feilsøking
+            return; // Avslutter programmet
+        }
+
+        int[] numbers = numberList.stream().mapToInt(i -> i).toArray(); // Konverterer listen til en int-array
+
+        BalancedBST.printBalancedOrder(numbers); // Kaller metoden for å skrive ut balansert BST
     }
 }
