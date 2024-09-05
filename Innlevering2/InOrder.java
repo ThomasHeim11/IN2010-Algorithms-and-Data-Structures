@@ -3,7 +3,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
+//Oppgave a) Bygge balanserte søketrær
 // Klasse som håndterer balanserte binære søketrær
 class BalancedBST {
 
