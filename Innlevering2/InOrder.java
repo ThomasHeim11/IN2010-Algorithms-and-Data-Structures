@@ -92,19 +92,26 @@ class InOrder {
         InOrder bst = new InOrder();
 
         try {
-            List<String> lines = Files.readAllLines(Paths.get(filePath));
-            for (String line : lines) {
-                try {
-                    int number = Integer.parseInt(line.trim());
-                    bst.leggTil(number);
-                } catch (NumberFormatException e) {
-                    // Handle the case where the line is not a valid integer
-                    System.err.println("Invalid number in file: " + line);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+    List<String> lines = Files.readAllLines(Paths.get(filePath));
+    int lineNumber = 0;
+    for (String line : lines) {
+        lineNumber++;
+        String trimmedLine = line.trim();
+        if (trimmedLine.isEmpty()) {
+            continue; // Ignorerer tomme linjer
         }
+        try {
+            int number = Integer.parseInt(trimmedLine);
+            bst.leggTil(number);
+        } catch (NumberFormatException e) {
+            // Handle the case where the line is not a valid integer
+            System.err.printf("Invalid number in file at line %d: %s%n", lineNumber, line);
+        }
+    }
+} catch (IOException e) {
+    e.printStackTrace();
+}
+
 
         bst.print();
     }
