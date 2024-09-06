@@ -5,34 +5,53 @@ import java.util.PriorityQueue;
 
 class HeapMetoder {
 
-    // Metode som skriver ut elementer i balansert postordre rekkefølge ved bruk av heaps
+    // Metode for å skrive ut elementer i balansert postordre rekkefølge
     public static void printBalancedPostOrder(PriorityQueue<Integer> heap) {
-        // Base-case: Hvis heap er tom
         if (heap.isEmpty()) {
             return;
         }
 
-        // Del elementene i heapen i to heaps
+        int size = heap.size();
+        if (size == 1) {
+            // Base-case: Hvis det kun er ett element, skriv ut og returner
+            System.out.println(heap.poll());
+            return;
+        }
+
+        // Beregn størrelsen til venstre og høyre sub-heap
+        int leftSize = calculateLeftSize(size);
         PriorityQueue<Integer> leftHeap = new PriorityQueue<>();
         PriorityQueue<Integer> rightHeap = new PriorityQueue<>();
 
-        // Antall elementer i heapen
-        int originalSize = heap.size();
-        // Flytt halvparten av elementene til venstreheapen
-        for (int i = 0; i < originalSize / 2; i++) {
-            leftHeap.offer(heap.poll());
-        }
-        // Flytt resten av elementene til høyreheapen
-        while (!heap.isEmpty()) {
-            rightHeap.offer(heap.poll());
-        }
+        // Fyll venstre sub-heap med rekursiv metode
+        fillHeap(heap, leftHeap, leftSize);
+
+        // Resten til høyre sub-heap
+        fillHeap(heap, rightHeap, size - leftSize);
 
         // Rekursiv kall for venstre sub-tre
         printBalancedPostOrder(leftHeap);
         // Rekursiv kall for høyre sub-tre
         printBalancedPostOrder(rightHeap);
+
         // Skriv ut roten
         System.out.println(heap.poll());
+    }
+
+    // Hjelpemetode for å beregne størrelsen på venstre sub-heap
+    private static int calculateLeftSize(int totalSize) {
+        // Ved et balansert tre, venstre sub-heap størrelse er antall noder
+        // til venstre for roten i et nesten komplett binært tre.
+        return ((totalSize - 1) / 2);
+    }
+
+    // Hjelpemetode for å fylle en sub-heap med count elementer rekursivt
+    private static void fillHeap(PriorityQueue<Integer> srcHeap, PriorityQueue<Integer> destHeap, int count) {
+        if (count <= 0 || srcHeap.isEmpty()) {
+            return;
+        }
+        destHeap.offer(srcHeap.poll());
+        fillHeap(srcHeap, destHeap, count - 1);
     }
 }
 
@@ -60,7 +79,7 @@ public class Heap {
             return;
         }
 
-        // Print elements in post-order for å oppnå balansert representasjon
+        // Skriv ut elementene i post-order for å oppnå balansert representasjon
         HeapMetoder.printBalancedPostOrder(minHeap);
     }
 }
