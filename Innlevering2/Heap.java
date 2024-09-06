@@ -5,11 +5,6 @@ import java.util.PriorityQueue;
 
 public class Heap {
 
-    // Metode for å finne foreldrenoden til A[i]
-    private static int parentOf(int i) {
-        return (i - 1) / 2;
-    }
-
     // Metode for å finne venstre barnet til A[i]
     private static int leftOf(int i) {
         return 2 * i + 1;
@@ -25,14 +20,12 @@ public class Heap {
         if (index >= size) {
             return;
         }
-           // Rot noden
+        // Rot noden
         System.out.println(heap[index]);
-                // Høyre sub-tree
+        // Høyre sub-tree
         printBalancedPostOrder(heap, rightOf(index), size);
         // Venstre sub-tree
         printBalancedPostOrder(heap, leftOf(index), size);
-
-     
     }
 
     public static void main(String[] args) {
@@ -44,6 +37,7 @@ public class Heap {
         String filename = args[0];
         PriorityQueue<Integer> minHeap = new PriorityQueue<>();
 
+        // Les fil og legg til elementer i minHeap
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -57,6 +51,7 @@ public class Heap {
             return;
         }
 
+        // Konverter minHeap til array
         int size = minHeap.size();
         int[] heapArray = new int[size];
         for (int i = 0; i < size; i++) {
