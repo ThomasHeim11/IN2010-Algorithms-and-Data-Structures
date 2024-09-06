@@ -3,7 +3,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.PriorityQueue;
 
-public class Heap {
+class HeapUtils {
 
     // Metode for å finne venstre barnet til A[i]
     private static int leftOf(int i) {
@@ -16,21 +16,26 @@ public class Heap {
     }
 
     // Metode som skriver ut elementer i postordre rekkefølge fra heap
-    private static void printBalancedPostOrder(int[] heap, int index, int size) {
+    public static void printBalancedPostOrder(int[] heap, int index, int size) {
         if (index >= size) {
             return;
         }
-        // Rot noden
-        System.out.println(heap[index]);
-        // Høyre sub-tree
-        printBalancedPostOrder(heap, rightOf(index), size);
-        // Venstre sub-tree
-        printBalancedPostOrder(heap, leftOf(index), size);
-    }
 
+        // Rekursivt håndtere venstre sub-tree
+        printBalancedPostOrder(heap, leftOf(index), size);
+
+        // Rekursivt håndtere høyre sub-tree
+        printBalancedPostOrder(heap, rightOf(index), size);
+
+        // Ut skriv roten etter sub-trærne
+        System.out.println(heap[index]);
+    }
+}
+
+public class Heap {
     public static void main(String[] args) {
         if (args.length != 1) {
-            System.out.println("Usage: java Heap <filename>");
+            System.out.println("Usage: java MinHeap <filename>");
             return;
         }
 
@@ -58,7 +63,7 @@ public class Heap {
             heapArray[i] = minHeap.poll();
         }
 
-        // Print elements in post-order
-        printBalancedPostOrder(heapArray, 0, size);
+        // Print elements in post-order til å oppnå balansert representasjon
+        HeapUtils.printBalancedPostOrder(heapArray, 0, size);
     }
 }
