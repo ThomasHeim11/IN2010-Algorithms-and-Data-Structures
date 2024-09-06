@@ -3,46 +3,50 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.PriorityQueue;
 
-class HeapUtils {
+class HeapMetoder {
 
-    // Metode for å finne venstre barnet til A[i]
-    private static int leftOf(int i) {
-        return 2 * i + 1;
-    }
-
-    // Metode for å finne høyre barnet til A[i]
-    private static int rightOf(int i) {
-        return 2 * i + 2;
-    }
-
-    // Metode som skriver ut elementer i postordre rekkefølge fra heap
-    public static void printBalancedPostOrder(int[] heap, int index, int size) {
-        if (index >= size) {
+    // Metode som skriver ut elementer i balansert postordre rekkefølge ved bruk av heaps
+    public static void printBalancedPostOrder(PriorityQueue<Integer> heap) {
+        // Base-case: Hvis heap er tom
+        if (heap.isEmpty()) {
             return;
         }
 
-        // Rekursivt håndtere venstre sub-tree
-        printBalancedPostOrder(heap, leftOf(index), size);
+        // Del elementene i heapen i to heaps
+        PriorityQueue<Integer> leftHeap = new PriorityQueue<>();
+        PriorityQueue<Integer> rightHeap = new PriorityQueue<>();
 
-        // Rekursivt håndtere høyre sub-tree
-        printBalancedPostOrder(heap, rightOf(index), size);
+        // Antall elementer i heapen
+        int originalSize = heap.size();
+        // Flytt halvparten av elementene til venstreheapen
+        for (int i = 0; i < originalSize / 2; i++) {
+            leftHeap.offer(heap.poll());
+        }
+        // Flytt resten av elementene til høyreheapen
+        while (!heap.isEmpty()) {
+            rightHeap.offer(heap.poll());
+        }
 
-        // Ut skriv roten etter sub-trærne
-        System.out.println(heap[index]);
+        // Rekursiv kall for venstre sub-tre
+        printBalancedPostOrder(leftHeap);
+        // Rekursiv kall for høyre sub-tre
+        printBalancedPostOrder(rightHeap);
+        // Skriv ut roten
+        System.out.println(heap.poll());
     }
 }
 
 public class Heap {
     public static void main(String[] args) {
         if (args.length != 1) {
-            System.out.println("Usage: java MinHeap <filename>");
+            System.out.println("Usage: java Heap <filename>");
             return;
         }
 
         String filename = args[0];
         PriorityQueue<Integer> minHeap = new PriorityQueue<>();
 
-        // Les fil og legg til elementer i minHeap
+        // Les inn elementer fra filen til minHeap
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -56,14 +60,7 @@ public class Heap {
             return;
         }
 
-        // Konverter minHeap til array
-        int size = minHeap.size();
-        int[] heapArray = new int[size];
-        for (int i = 0; i < size; i++) {
-            heapArray[i] = minHeap.poll();
-        }
-
-        // Print elements in post-order til å oppnå balansert representasjon
-        HeapUtils.printBalancedPostOrder(heapArray, 0, size);
+        // Print elements in post-order for å oppnå balansert representasjon
+        HeapMetoder.printBalancedPostOrder(minHeap);
     }
 }
