@@ -4,29 +4,35 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.PriorityQueue;
 
-class BalancedBSTRecursive {
+class BalancedBSTUsingHeap {
 
-    // Metode for å skrive ut et balansert binært søketre i post-ordre rekkefølge ved rekursjon
-    public void printBalancedOrder(int[] numbers) {
-        printBalancedOrderHelper(numbers, 0, numbers.length - 1);
+    public void printBalancedOrder(PriorityQueue<Integer> heap) {
+        List<Integer> numbers = new ArrayList<>(heap);
+        Collections.sort(numbers);
+        int[] sortedArray = toIntArray(numbers, 0);
+        printBalancedOrderHelper(sortedArray, 0, sortedArray.length - 1);
     }
-
-    // Hjelpefunksjon for rekursiv konstruksjon av balansert BST
+    
+    private int[] toIntArray(List<Integer> numbers, int index) {
+        if (index == numbers.size()) {
+            return new int[numbers.size()];
+        }
+        int[] array = toIntArray(numbers, index + 1);
+        array[index] = numbers.get(index);
+        return array;
+    }
+    
     private void printBalancedOrderHelper(int[] numbers, int start, int end) {
         if (start > end) {
-            return;  // Basis tilfelle for rekursjon, ingen elementer igjen
+            return;
         }
 
-        int mid = (start + end) / 2;  // Finn midtpunktet i den nåværende delarrayen
-
-        // Operer på midtpunktet først
+        int mid = (start + end) / 2;
         System.out.println(numbers[mid]);
 
-        // Rekursivt håndtere venstre sub-array først
         printBalancedOrderHelper(numbers, start, mid - 1);
-
-        // Rekursivt håndtere høyre sub-array
         printBalancedOrderHelper(numbers, mid + 1, end);
     }
 }
@@ -39,25 +45,44 @@ public class Heap {
         }
 
         String filename = args[0];
-        List<Integer> numberList = new ArrayList<>();
-
-        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                line = line.trim();
-                if (!line.isEmpty()) {
-                    numberList.add(Integer.parseInt(line));
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        
+        // Les tallene fra filen og sett dem i en PriorityQueue (heap)
+        PriorityQueue<Integer> heap = lesOgSorterInput(filename);
+        
+        if (heap == null) {
             return;
         }
+        
+        // Opprett en instans av BalancedBSTUsingHeap og kall algoritmen
+        BalancedBSTUsingHeap bst = new BalancedBSTUsingHeap();
+        bst.printBalancedOrder(heap);
+    }
+    
+    public static PriorityQueue<Integer> lesOgSorterInput(String filename) {
+        List<Integer> numberList = new ArrayList<>();
+        
+        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+            numberList = readNumbers(br);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        
+        Collections.sort(numberList);
+        PriorityQueue<Integer> heap = new PriorityQueue<>(numberList);
+        return heap;
+    }
 
-        Collections.sort(numberList); // Sørg for at listen er sortert
-        int[] numbers = numberList.stream().mapToInt(i -> i).toArray(); // Konverterer listen til en int-array
-
-        BalancedBSTRecursive bst = new BalancedBSTRecursive();
-        bst.printBalancedOrder(numbers); // Kaller metoden for å skrive ut balansert BST rekkefølge
+    private static List<Integer> readNumbers(BufferedReader br) throws IOException {
+        String line = br.readLine();
+        if (line == null) {
+            return new ArrayList<>();
+        }
+        line = line.trim();
+        List<Integer> list = readNumbers(br);
+        if (!line.isEmpty()) {
+            list.add(Integer.parseInt(line));
+        }
+        return list;
     }
 }
