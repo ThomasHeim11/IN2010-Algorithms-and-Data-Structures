@@ -4,36 +4,30 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.PriorityQueue;
 
-class BalancedBSTHeap {
+class BalancedBSTRecursive {
 
-    // Hjelpefunksjon for å konstruere balansert rekkefølge ved hjelp av heap
-    public static void printBalancedOrder(List<Integer> input) {
-        PriorityQueue<Integer[]> heap = new PriorityQueue<>((a, b) -> Integer.compare(a[0], b[0]));
-        heap.offer(new Integer[]{0, input.size() - 1});
+    // Metode for å skrive ut et balansert binært søketre i post-ordre rekkefølge ved rekursjon
+    public void printBalancedOrder(int[] numbers) {
+        printBalancedOrderHelper(numbers, 0, numbers.length - 1);
+    }
 
-        // List for å lagre resultatene
-        List<Integer> result = new ArrayList<>();
-        
-        while (!heap.isEmpty()) {
-            Integer[] range = heap.poll();
-            int start = range[0];
-            int end = range[1];
-            
-            if (start > end) continue;
-            
-            int mid = (start + end) / 2;
-            result.add(input.get(mid));
-            
-            // Legg venstre og høyre sub-arrays på heap
-            heap.offer(new Integer[]{start, mid - 1});
-            heap.offer(new Integer[]{mid + 1, end});
+    // Hjelpefunksjon for rekursiv konstruksjon av balansert BST
+    private void printBalancedOrderHelper(int[] numbers, int start, int end) {
+        if (start > end) {
+            return;  // Basis tilfelle for rekursjon, ingen elementer igjen
         }
-        
-        for (int num : result) {
-            System.out.println(num);
-        }
+
+        int mid = (start + end) / 2;  // Finn midtpunktet i den nåværende delarrayen
+
+        // Operer på midtpunktet først
+        System.out.println(numbers[mid]);
+
+        // Rekursivt håndtere venstre sub-array først
+        printBalancedOrderHelper(numbers, start, mid - 1);
+
+        // Rekursivt håndtere høyre sub-array
+        printBalancedOrderHelper(numbers, mid + 1, end);
     }
 }
 
@@ -61,6 +55,9 @@ public class Heap {
         }
 
         Collections.sort(numberList); // Sørg for at listen er sortert
-        BalancedBSTHeap.printBalancedOrder(numberList); // Kaller metoden for å skrive ut balansert BST rekkefølge ved hjelp av heap
+        int[] numbers = numberList.stream().mapToInt(i -> i).toArray(); // Konverterer listen til en int-array
+
+        BalancedBSTRecursive bst = new BalancedBSTRecursive();
+        bst.printBalancedOrder(numbers); // Kaller metoden for å skrive ut balansert BST rekkefølge
     }
 }
