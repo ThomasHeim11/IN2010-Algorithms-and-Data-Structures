@@ -2,7 +2,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.PriorityQueue;
 
@@ -10,9 +9,11 @@ class BalancedBSTUsingHeap {
 
     // Metode for å skrive ut elementene i balansert rekkefølge
     public void printBalancedOrder(PriorityQueue<Integer> heap) {
-        // Sorter elementene fra heap i en liste
-        List<Integer> numbers = new ArrayList<>(heap);
-        Collections.sort(numbers);
+        // Sorter elementene fra heap i en liste ved hjelp av poll()
+        List<Integer> numbers = new ArrayList<>();
+        while (!heap.isEmpty()) {
+            numbers.add(heap.poll());
+        }
         
         // Skriv ut elementene i en balansert rekkefølge
         printBalancedOrderHelper(numbers, 0, numbers.size() - 1);
@@ -54,29 +55,21 @@ public class Heap {
     }
     
     public static PriorityQueue<Integer> lesOgSorterInput(String filename) {
-        List<Integer> numberList = new ArrayList<>();
+        PriorityQueue<Integer> heap = new PriorityQueue<>();
         
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            numberList = readNumbers(br);
+            String line;
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                if (!line.isEmpty()) {
+                    heap.offer(Integer.parseInt(line));
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
         
-        Collections.sort(numberList);
-        return new PriorityQueue<>(numberList);
-    }
-
-    private static List<Integer> readNumbers(BufferedReader br) throws IOException {
-        String line = br.readLine();
-        if (line == null) {
-            return new ArrayList<>();
-        }
-        line = line.trim();
-        List<Integer> list = readNumbers(br);
-        if (!line.isEmpty()) {
-            list.add(Integer.parseInt(line));
-        }
-        return list;
+        return heap;
     }
 }
