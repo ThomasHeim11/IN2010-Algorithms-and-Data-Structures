@@ -1,77 +1,58 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.PriorityQueue;
 
-class HeapMetoder {
+class BalancedBSTHeap {
 
-    // Metode for å skrive ut elementer i balansert postordre rekkefølge
-    public static void printBalancedPostOrder(PriorityQueue<Integer> heap) {
-        if (heap.isEmpty()) {
-            return;
+    // Hjelpefunksjon for å konstruere balansert rekkefølge ved hjelp av heap
+    public static void printBalancedOrder(List<Integer> input) {
+        PriorityQueue<Integer[]> heap = new PriorityQueue<>((a, b) -> Integer.compare(a[0], b[0]));
+        heap.offer(new Integer[]{0, input.size() - 1});
+
+        // List for å lagre resultatene
+        List<Integer> result = new ArrayList<>();
+        
+        while (!heap.isEmpty()) {
+            Integer[] range = heap.poll();
+            int start = range[0];
+            int end = range[1];
+            
+            if (start > end) continue;
+            
+            int mid = (start + end) / 2;
+            result.add(input.get(mid));
+            
+            // Legg venstre og høyre sub-arrays på heap
+            heap.offer(new Integer[]{start, mid - 1});
+            heap.offer(new Integer[]{mid + 1, end});
         }
-
-        int size = heap.size();
-        if (size == 1) {
-            // Base-case: Hvis det kun er ett element, skriv ut og returner
-            System.out.println(heap.poll());
-            return;
+        
+        for (int num : result) {
+            System.out.println(num);
         }
-
-        // Beregn størrelsen til venstre og høyre sub-heap
-        int leftSize = calculateLeftSize(size);
-        PriorityQueue<Integer> leftHeap = new PriorityQueue<>();
-        PriorityQueue<Integer> rightHeap = new PriorityQueue<>();
-
-        // Fyll venstre sub-heap med rekursiv metode
-        fillHeap(heap, leftHeap, leftSize);
-
-        // Resten til høyre sub-heap
-        fillHeap(heap, rightHeap, size - leftSize);
-
-        // Rekursiv kall for venstre sub-tre
-        printBalancedPostOrder(leftHeap);
-        // Rekursiv kall for høyre sub-tre
-        printBalancedPostOrder(rightHeap);
-
-        // Skriv ut roten
-        System.out.println(heap.poll());
-    }
-
-    // Hjelpemetode for å beregne størrelsen på venstre sub-heap
-    private static int calculateLeftSize(int totalSize) {
-        // Ved et balansert tre, venstre sub-heap størrelse er antall noder
-        // til venstre for roten i et nesten komplett binært tre.
-        return ((totalSize - 1) / 2);
-    }
-
-    // Hjelpemetode for å fylle en sub-heap med count elementer rekursivt
-    private static void fillHeap(PriorityQueue<Integer> srcHeap, PriorityQueue<Integer> destHeap, int count) {
-        if (count <= 0 || srcHeap.isEmpty()) {
-            return;
-        }
-        destHeap.offer(srcHeap.poll());
-        fillHeap(srcHeap, destHeap, count - 1);
     }
 }
 
 public class Heap {
     public static void main(String[] args) {
         if (args.length != 1) {
-            System.out.println("Usage: java Heap <filename>");
+            System.out.println("Usage: java Main <filename>");
             return;
         }
 
         String filename = args[0];
-        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+        List<Integer> numberList = new ArrayList<>();
 
-        // Les inn elementer fra filen til minHeap
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
             while ((line = br.readLine()) != null) {
                 line = line.trim();
                 if (!line.isEmpty()) {
-                    minHeap.offer(Integer.parseInt(line));
+                    numberList.add(Integer.parseInt(line));
                 }
             }
         } catch (IOException e) {
@@ -79,7 +60,7 @@ public class Heap {
             return;
         }
 
-        // Skriv ut elementene i post-order for å oppnå balansert representasjon
-        HeapMetoder.printBalancedPostOrder(minHeap);
+        Collections.sort(numberList); // Sørg for at listen er sortert
+        BalancedBSTHeap.printBalancedOrder(numberList); // Kaller metoden for å skrive ut balansert BST rekkefølge ved hjelp av heap
     }
 }
