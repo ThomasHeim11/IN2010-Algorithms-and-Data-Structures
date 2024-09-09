@@ -1,7 +1,22 @@
 
-ALGORITHM: 
-Input: 
-Output:
+ALGORITHM: Balansert BST med bruka av Heap
+Input: En heap (PriorityQueue) med tall
+Output: Tallene skrevet ut balansert rekkefølge
 
-Procedure 
+Procedure printBalancedOrder(heap)
+    numbers = NEW List av Integers fra heap
+        Collections.sort(numbers)
+        printBalancedOrderHelper (numbers, 0, LENGTH(numbers) -1) 
+
+
+ Procedure printBalancedOrderHelper(numbers, start, end)
+    if start > end then
+        return
+
+    mid = (start + end) / 2
+    PRINT numbers[mid]
+
+    printBalancedOrderHelper(numbers, start,mid-1)
+    printBalancedOrderHelper(numbers,mid + 1,end)
+
 
