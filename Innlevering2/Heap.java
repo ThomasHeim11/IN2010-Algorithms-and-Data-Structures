@@ -8,29 +8,24 @@ import java.util.PriorityQueue;
 
 class BalancedBSTUsingHeap {
 
+    // Metode for å skrive ut elementene i balansert rekkefølge
     public void printBalancedOrder(PriorityQueue<Integer> heap) {
+        // Sorter elementene fra heap i en liste
         List<Integer> numbers = new ArrayList<>(heap);
         Collections.sort(numbers);
-        int[] sortedArray = toIntArray(numbers, 0);
-        printBalancedOrderHelper(sortedArray, 0, sortedArray.length - 1);
+        
+        // Skriv ut elementene i en balansert rekkefølge
+        printBalancedOrderHelper(numbers, 0, numbers.size() - 1);
     }
     
-    private int[] toIntArray(List<Integer> numbers, int index) {
-        if (index == numbers.size()) {
-            return new int[numbers.size()];
-        }
-        int[] array = toIntArray(numbers, index + 1);
-        array[index] = numbers.get(index);
-        return array;
-    }
-    
-    private void printBalancedOrderHelper(int[] numbers, int start, int end) {
+    // Rekursiv metode for å skrive ut elementer i balansert rekkefølge
+    private void printBalancedOrderHelper(List<Integer> numbers, int start, int end) {
         if (start > end) {
             return;
         }
 
         int mid = (start + end) / 2;
-        System.out.println(numbers[mid]);
+        System.out.println(numbers.get(mid));
 
         printBalancedOrderHelper(numbers, start, mid - 1);
         printBalancedOrderHelper(numbers, mid + 1, end);
@@ -53,7 +48,7 @@ public class Heap {
             return;
         }
         
-        // Opprett en instans av BalancedBSTUsingHeap og kall algoritmen
+        // Opprett en instans av BalancedBSTUsingHeap og kall algoritmen.
         BalancedBSTUsingHeap bst = new BalancedBSTUsingHeap();
         bst.printBalancedOrder(heap);
     }
@@ -69,8 +64,7 @@ public class Heap {
         }
         
         Collections.sort(numberList);
-        PriorityQueue<Integer> heap = new PriorityQueue<>(numberList);
-        return heap;
+        return new PriorityQueue<>(numberList);
     }
 
     private static List<Integer> readNumbers(BufferedReader br) throws IOException {
