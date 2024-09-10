@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 
+// Oppgave b) Bygge balanserte søketrær
 class BalancedBSTUsingHeap {
 
     // Metode for å skrive ut elementene i balansert rekkefølge
