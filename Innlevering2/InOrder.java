@@ -36,7 +36,7 @@ public class InOrder {
 
     public static void main(String[] args) {
         if (args.length != 1) { // Sjekker om det er oppgitt en fil som argument
-            System.out.println("Usage: java Main <filename>"); // Skriver ut riktig bruksmåte
+            System.out.println("Bruk: java InOrder <filename>"); // Skriver ut riktig bruksmåte
             return; // Avslutter programmet
         }
 
