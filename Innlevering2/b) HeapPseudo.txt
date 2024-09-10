@@ -3,20 +3,30 @@ Input: En heap (PriorityQueue) med tall
 Output: Tallene skrevet ut i balansert rekkefølge
 
 Procedure printBalancedOrder(heap)
-    tallListe <- ny liste av heltall
-    while heap ikke er tom do
-        tallListe.leggTil(heap.poll())
-    
-    printBalancedOrderHelper(tallListe, 0, |tallListe| -1)
+    printBalanceOrderHelper(heap, |heap|)
 
-Procedure printBalancedOrderHelper(tallListe,start,end)
-    if start > end then
+Procedure printBalancedOrderHelper(heap,size)
+    if size = 0 or heap isEmpty then
         return
     
-    mid <- (start + end)/ 2
-    PRINT(tallListe.get(mid))
+    midIndex <- size/2
 
-    printBalancedOrderHelper(tallListe,start,end - 1)
-    printBalancedOrderHelper(tallListe,mid + 1,end)
+    leftHeap ← new PriorityQueue()
+    rightHeap ← new PriorityQueue()
+
+    count <- 0
+    while count < size do
+        elem <- heap.poll()
+        if count < midIndex then
+            leftHeap.offet(elem)
+        else if count = midindex then
+            print(elem)
+        else
+            rightHeap.offer(elem)
+        count <- count + 1
+
+        printBalancedOrderHelper(leftHeap, |leftHeap|)
+        printBalancedOrderHelper(rightHeap, |rightHeap|)
+    
 
 

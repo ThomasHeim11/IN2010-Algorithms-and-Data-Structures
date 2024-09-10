@@ -24,16 +24,18 @@ class BalancedBSTUsingHeap {
         PriorityQueue<Integer> rightHeap = new PriorityQueue<>();
         
         // Flytt elementer til venstre heap, så midt og skriv det ut, og til slutt høyre heap
-        for (int i = 0; i < size; i++) {
+        int count = 0;
+        while (count < size) {
             int elem = heap.poll();
-            if (i < midIndex) {
+            if (count < midIndex) {
                 leftHeap.offer(elem);
-            } else if (i == midIndex) {
+            } else if (count == midIndex) {
                 // Midterste elementet
                 System.out.println(elem);
             } else {
                 rightHeap.offer(elem);
             }
+            count++;
         }
 
         // Rekursive anrop til venstre og høyre del
