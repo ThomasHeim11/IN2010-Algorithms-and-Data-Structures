@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+//Opggave b) Effektive mengder
 
 // Oppretter en trestruktur for sett.
 class TreeNode {

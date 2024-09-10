@@ -21,7 +21,7 @@ class SetBST {
         root = null;
         size = 0;
     }
-    // Bruk
+    // Henter rot-noden.
     public boolean contains(SetBST set, int x) {
         return contains(set.root, x);
     }
@@ -106,7 +106,7 @@ class SetBST {
         }
         return minv;
     }
-    //TODO SJEKK OM SET SKAL BORT
+
     // Henter størrelsen på settet.
     public int size(SetBST set) {
         return size;
