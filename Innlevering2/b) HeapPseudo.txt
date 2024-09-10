@@ -1,6 +1,6 @@
 ALGORITHM: Balansert BST med bruka av Heap
 Input: En heap (PriorityQueue) med tall
-Output: Tallene skrevet ut balansert rekkefølge
+Output: Tallene skrevet ut i balansert rekkefølge
 
 Procedure printBalancedOrder(heap)
     tallListe <- ny liste av heltall
@@ -14,9 +14,9 @@ Procedure printBalancedOrderHelper(tallListe,start,end)
         return
     
     mid <- (start + end)/ 2
-    skrivUt(tallListe.get(mid))
+    PRINT(tallListe.get(mid))
 
     printBalancedOrderHelper(tallListe,start,end - 1)
-    printBalancedOrderHelper(tallListe,mid + 1, slutt)
+    printBalancedOrderHelper(tallListe,mid + 1,end)
 
 
