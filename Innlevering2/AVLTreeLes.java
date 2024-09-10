@@ -113,7 +113,7 @@ class AVLTree {
         } else if (x > node.x) {
             node.right = insert(node.right, x);
         } else {
-            return node;  // Ingen duplikater
+            return node;  
         }
 
         setHeight(node);      // <@ ny kode @>
