@@ -19,8 +19,8 @@ public class MergeSort{
         return Merge(sortedLeft, sortedRigth);
 
     }
+   
 }
-
 public class Merge{
     public static int[] merge(int[] A1, int[] A2){
         int i = 0;
