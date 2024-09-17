@@ -25,6 +25,7 @@ public class SortComparison {
         
         String outputFilename = filename + "_results.csv";
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFilename))) {
+
             // CSV header
             String header = String.join(",",
                 "n",
@@ -56,7 +57,7 @@ public class SortComparison {
                 long heapDuration = (System.nanoTime() - startTime) / 1000;
                 int heapComparisons = Heapsort.comparisons;
                 int heapSwaps = Heapsort.swaps;
-
+                
                 // InsertionSort
                 subArray = Arrays.copyOf(array, i);
                 InsertionSort.comparisons = 0;
@@ -66,7 +67,7 @@ public class SortComparison {
                 long insertionDuration = (System.nanoTime() - startTime) / 1000;
                 int insertionComparisons = InsertionSort.comparisons;
                 int insertionSwaps = InsertionSort.swaps;
-                
+
                 // MergeSort
                 subArray = Arrays.copyOf(array, i);
                 MergeSort.comparisons = 0;
@@ -77,14 +78,14 @@ public class SortComparison {
                 int mergeComparisons = MergeSort.comparisons;
                 int mergeSwaps = MergeSort.swaps;
 
-                // Write to CSV file
-                writer.write(String.join(",",
-                    String.valueOf(i), 
-                    String.valueOf(bucketComparisons), String.valueOf(bucketSwaps), String.valueOf(bucketDuration),
-                    String.valueOf(heapComparisons), String.valueOf(heapSwaps), String.valueOf(heapDuration),
-                    String.valueOf(insertionComparisons), String.valueOf(insertionSwaps), String.valueOf(insertionDuration),
-                    String.valueOf(mergeComparisons), String.valueOf(mergeSwaps), String.valueOf(mergeDuration)
-                ) + "\n");
+                // Write to CSV file with formatting to ensure alignment (using fixed-width columns)
+                writer.write(String.format("%-5d,%-12d,%-12d,%-12d,%-12d,%-12d,%-12d,%-16d,%-16d,%-16d,%-16d,%-16d,%-16d\n",
+                    i, 
+                    bucketComparisons, bucketSwaps, bucketDuration,
+                    heapComparisons, heapSwaps, heapDuration,
+                    insertionComparisons, insertionSwaps, insertionDuration,
+                    mergeComparisons, mergeSwaps, mergeDuration
+                ));
             }
         } catch (IOException e) {
             e.printStackTrace();
