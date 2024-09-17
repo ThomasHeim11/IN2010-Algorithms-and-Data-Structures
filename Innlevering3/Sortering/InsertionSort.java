@@ -41,7 +41,7 @@ public static void main(String[] args) throws IOException{
     }
     // Konverterer ArrayList til int-array. 
     int[] array = tall.stream().mapToInt(i -> i).toArray();
-    //Sorterer innsetingssortering. 
+    //Sorterer  
     InsertionSort(array);
 
     // Skriv ut til fil

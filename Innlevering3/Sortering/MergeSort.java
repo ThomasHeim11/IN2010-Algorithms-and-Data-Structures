@@ -74,7 +74,7 @@ public class MergeSort {
         // Konverter ArrayList til en int-array
         int[] array = numbers.stream().mapToInt(i -> i).toArray();
 
-        // Sorter med mergesort
+        // Sorter
         int[] sortedArray = mergeSort(array);
 
         // Skriv ut til fil

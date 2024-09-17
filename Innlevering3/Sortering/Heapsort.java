@@ -78,11 +78,11 @@ public class Heapsort{
     }
     // Konverterer ArrayList til int-array. 
     int[] array = tall.stream().mapToInt(i -> i).toArray();
-    //Sorterer innsetingssortering. 
+    //Sorterer. 
     heapsort(array);
 
     // Skriv ut til fil
-    try(FileWriter fw = new FileWriter(filnavn+ "_insertion.out")){
+    try(FileWriter fw = new FileWriter(filnavn+ "_heap.out")){
         for(int num : array){
             fw.write(num + "\n");
         }
