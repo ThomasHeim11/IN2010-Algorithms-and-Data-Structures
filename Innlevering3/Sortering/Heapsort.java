@@ -49,7 +49,7 @@ public class Heapsort{
         //Hvis max ikke er indeksen i, betyr det at ett av barna er større enn foreldrene.
         if(max != i){
             swap(A,i,max);
-            heapify(A, i, n);
+            heapify(A, max, n);
         }
         }
         // Swap funksjonen
