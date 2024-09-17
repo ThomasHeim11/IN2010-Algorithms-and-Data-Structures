@@ -28,19 +28,23 @@ public class MergeSort {
     }
 
     public static int[] merge(int[] A1, int[] A2) {
+        // En array for flettede resultat. 
         int[] result = new int[A1.length + A2.length];
         int i = 0, j = 0, k = 0;
         // Fortsetter så lenge begge inndekser er innen grenser for A1 og A2.
         while (i < A1.length && j < A2.length) {
+            // Legger det minste elementet fra A1 eller A2 inn i resulat-array. 
             if (A1[i] <= A2[j]) {
                 result[k++] = A1[i++];
             } else {
                 result[k++] = A2[j++];
             }
         }
+        // Kopierer eventuelle gjenværende elementer fra A1 til resultat-arrayen.
         while (i < A1.length) {
             result[k++] = A1[i++];
         }
+        // Kopierer eventuelle gjenværende elementer fra A2 til resultat-arrayen.
         while (j < A2.length) {
             result[k++] = A2[j++];
         }
