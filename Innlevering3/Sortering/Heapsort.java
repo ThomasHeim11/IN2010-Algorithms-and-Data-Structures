@@ -23,6 +23,7 @@ public class Heapsort{
         for(int i = n/2-1; i >= 0; i--){
             heapify(A,i,n);
         }
+    }
         // Funksjonen for heapify
         private static void heapify(int[] A, int i, int n){
             int left = 2*1+1;
@@ -50,4 +51,3 @@ public class Heapsort{
             A[y] = temp;
         }
     }
-}
