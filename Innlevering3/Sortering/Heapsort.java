@@ -1,4 +1,4 @@
-class Heap extends Sorter {
+class Heapsort extends Sorter {
     @Override
     void sort() {
         heapsort(A, n);
