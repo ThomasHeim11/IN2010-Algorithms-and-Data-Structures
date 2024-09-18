@@ -1,86 +1,57 @@
-import java.io.*;
-import java.util.ArrayList;
-
-public class MergeSort {
-    public static int comparisons = 0;
-    public static int swaps = 0;
-
-    public static int[] mergeSort(int[] A) {
-        if (A.length <= 1) {
-            comparisons++;
-            return A;
-        }
-
-        int mid = A.length / 2;
-        int[] left = new int[mid];
-        int[] right = new int[A.length - mid];
-        System.arraycopy(A, 0, left, 0, mid);
-        System.arraycopy(A, mid, right, 0, A.length - mid);
-
-        int[] sortedLeft = mergeSort(left);
-        int[] sortedRight = mergeSort(right);
-
-        return merge(sortedLeft, sortedRight);
+class MergeSort extends Sorter {
+    @Override
+    void sort() {
+        mergeSort(A, 0, n - 1);
     }
 
-    public static int[] merge(int[] A1, int[] A2) {
-        int[] result = new int[A1.length + A2.length];
-        int i = 0, j = 0, k = 0;
-        while (i < A1.length && j < A2.length) {
-            comparisons++;
-            if (A1[i] <= A2[j]) {
-                result[k++] = A1[i++];
-                swaps++;
+    private void mergeSort(int[] array, int left, int right) {
+        if (left < right) {
+            int middle = (left + right) / 2;
+            mergeSort(array, left, middle);
+            mergeSort(array, middle + 1, right);
+            merge(array, left, middle, right);
+        }
+    }
+
+    private void merge(int[] array, int left, int middle, int right) {
+        int n1 = middle - left + 1;
+        int n2 = right - middle;
+        int[] L = new int[n1];
+        int[] R = new int[n2];
+
+        for (int i = 0; i < n1; i++)
+            L[i] = array[left + i];
+        for (int j = 0; j < n2; j++)
+            R[j] = array[middle + 1 + j];
+
+        int i = 0, j = 0, k = left;
+        while (i < n1 && j < n2) {
+            if (leq(L[i], R[j])) {
+                array[k] = L[i];
+                i++;
             } else {
-                result[k++] = A2[j++];
+                array[k] = R[j];
+                j++;
                 swaps++;
             }
+            k++;
         }
-        while (i < A1.length) {
-            result[k++] = A1[i++];
-            swaps++;
+
+        while (i < n1) {
+            array[k] = L[i];
+            i++;
+            k++;
         }
-        while (j < A2.length) {
-            result[k++] = A2[j++];
-            swaps++;
+
+        while (j < n2) {
+            array[k] = R[j];
+            j++;
+            k++;
         }
-        return result;
     }
 
-    public static void main(String[] args) throws IOException {
-        if (args.length != 1) {
-            System.out.println("Usage: java MergeSort <filename>");
-            System.exit(1);
-        }
-
-        String filename = args[0];
-        ArrayList<Integer> numbers = new ArrayList<>();
-
-        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                numbers.add(Integer.parseInt(line.trim()));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
-
-        int[] array = numbers.stream().mapToInt(i -> i).toArray();
-        long startTime = System.nanoTime();
-        int[] sortedArray = mergeSort(array);
-        long duration = (System.nanoTime() - startTime) / 1000;
-
-        try (FileWriter fw = new FileWriter(filename + "_merge.out")) {
-            for (int num : sortedArray) {
-                fw.write(num + "\n");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        
-        System.out.println("Comparisons: " + comparisons);
-        System.out.println("Swaps: " + swaps);
-        System.out.println("Time (microseconds): " + duration);
+    @Override
+    String algorithmName() {
+        return "merge";
     }
 }

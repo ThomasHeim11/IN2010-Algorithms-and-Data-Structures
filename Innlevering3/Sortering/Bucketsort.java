@@ -1,57 +1,46 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
-public class Bucketsort {
-    public static int comparisons = 0;
-    public static int swaps = 0;
+import java.util.Arrays;
 
-    public static void bucketSort(int[] array) {
-        // Initialisering
-        comparisons = 0;
-        swaps = 0;
+class Bucketsort extends Sorter {
+    @Override
+    void sort() {
+        bucketSort(A, n);
+    }
 
-        if (array == null || array.length == 0) {
-            comparisons++; // for checking array length
-            return;
-        }
+    private void bucketSort(int[] array, int n) {
+        if (n <= 0) return;
+        int max = Arrays.stream(array).max().getAsInt();
+        int min = Arrays.stream(array).min().getAsInt();
+        int bucketCount = max - min + 1;
+        int[][] buckets = new int[bucketCount][];
 
-        int minValue = array[0];
-        int maxValue = array[0];
-        
-        // Finn maksimum og minimum verdier i arrayen
-        for (int value : array) {
-            if (value < minValue) {
-                minValue = value;
-                swaps++;
-            } else if (value > maxValue) {
-                maxValue = value;
-                swaps++;
-            }
-            comparisons += 2; // for each comparison
-        }
-
-        // Initialiser bøttene
-        int bucketCount = maxValue - minValue + 1;
-        List<List<Integer>> buckets = new ArrayList<>(bucketCount);
         for (int i = 0; i < bucketCount; i++) {
-            buckets.add(new ArrayList<>());
+            buckets[i] = new int[n]; // initialize with maximum possible length
         }
 
-        // Distribuer inputverdiene til bøttene
-        for (int value : array) {
-            int bucketIndex = value - minValue;
-            buckets.get(bucketIndex).add(value);
+        int[] indexArray = new int[bucketCount];
+
+        for (int i = 0; i < n; i++) {
+            comparisons++;
+            int bucketIndex = (array[i] - min) / bucketCount;
+            buckets[bucketIndex][indexArray[bucketIndex]++] = array[i];
         }
 
-        // Sorter hver bøtte og sett sammen resultatet
-        int arrayIndex = 0;
-        for (List<Integer> bucket : buckets) {
-            Collections.sort(bucket);
-            for (int value : bucket) {
-                array[arrayIndex++] = value;
-                swaps++;
+        int currentIndex = 0;
+
+        for (int i = 0; i < bucketCount; i++) {
+            if (indexArray[i] != 0) {
+                Arrays.sort(buckets[i], 0, indexArray[i]);
+                for (int j = 0; j < indexArray[i]; j++) {
+                    array[currentIndex++] = buckets[i][j];
+                    swaps++;
+                }
             }
         }
+    }
+
+    @Override
+    String algorithmName() {
+        return "bucket";
     }
 }

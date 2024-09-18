@@ -1,24 +1,20 @@
-public class InsertionSort {
-    public static int comparisons = 0;
-    public static int swaps = 0;
-
-    public static void insertionSort(int[] array) {
-        comparisons = 0;
-        swaps = 0;
-
-        for (int i = 1; i < array.length; i++) {
-            int key = array[i];
+class InsertionSort extends Sorter {
+    @Override
+    void sort() {
+        for (int i = 1; i < n; i++) {
+            int key = A[i];
             int j = i - 1;
-
-            while (j >= 0 && array[j] > key) {
-                comparisons++;
-                array[j + 1] = array[j];
-                swaps++;
+            while (j >= 0 && gt(A[j], key)) {
+                A[j + 1] = A[j];
                 j = j - 1;
+                swaps++;
             }
-            
-            array[j + 1] = key;
-            swaps++;
+            A[j + 1] = key;
         }
+    }
+
+    @Override
+    String algorithmName() {
+        return "insertion";
     }
 }
