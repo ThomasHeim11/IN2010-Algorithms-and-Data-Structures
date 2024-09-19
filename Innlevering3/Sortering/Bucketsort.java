@@ -58,10 +58,8 @@ class Bucketsort extends Sorter {
                 swaps++;
             }
         }
-
         System.out.println("Sorted Array: " + Arrays.toString(array));
     }
-
     @Override
     String algorithmName() {
         return "bucket";
