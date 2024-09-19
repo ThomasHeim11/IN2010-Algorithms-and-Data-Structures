@@ -3,38 +3,40 @@ import java.util.Arrays;
 import java.util.Collections;
 
 class Bucketsort extends Sorter {
+    
     @Override
     void sort() {
         bucketSort(A, n);
     }
-    
+    // Implementerer bucketSort-metoden som sorterer et array ved hjelp av bøttesortering
     private void bucketSort(int[] array, int n) {
+        // Sjekker om array er tom eller holder 0 elementer. 
         if (n <= 0) return;
 
-        // Calculate the range of the input array
+        // Beregner range av input-arrayet. 
         int max = Arrays.stream(array).max().getAsInt();
         int min = Arrays.stream(array).min().getAsInt();
         int range = max - min + 1;
 
-        // Use a standard heuristic for number of buckets
+        // Bestemmer antall bøtter. 
         int bucketCount = (int) Math.sqrt(n);
         
-        // Ensure bucketCount is at least 1
+        // Sikrer at antall bøtter er minst 1. 
         if (bucketCount < 1) {
             bucketCount = 1;
         }
 
-        // Initialize the buckets
+        // Initialiserer bøttene
         ArrayList<ArrayList<Integer>> buckets = new ArrayList<>(bucketCount);
         for (int i = 0; i < bucketCount; i++) {
             buckets.add(new ArrayList<>());
         }
 
-        // Distribute array elements into buckets
+        // Fordeler elementene fra arrayet inn i passende bøtter
         for (int i = 0; i < n; i++) {
             comparisons++;
             int bucketIndex = (int) Math.floor(((double) (array[i] - min) / range) * bucketCount);
-            // Ensure bucketIndex is in the valid range [0, bucketCount-1]
+            // Sikrer at bucketIndex er innenfor gyldig område[0, bucketCount-1]
             if (bucketIndex >= bucketCount) {
                 bucketIndex = bucketCount - 1;
             }
@@ -42,12 +44,12 @@ class Bucketsort extends Sorter {
             buckets.get(bucketIndex).add(array[i]);
         }
 
-        // Print bucket contents for debugging
+        // Skriv ut bøttenes innhold for feilsøking
         for (int i = 0; i < bucketCount; i++) {
             System.out.println("Bucket " + i + ": " + buckets.get(i));
         }
 
-        // Merge sorted buckets
+        // Slår sammen sorterte bøtter tilbake til det opprinnelige arrayet
         int currentIndex = 0;
         for (ArrayList<Integer> bucket : buckets) {
             Collections.sort(bucket);
@@ -57,7 +59,6 @@ class Bucketsort extends Sorter {
             }
         }
 
-        // Print the final sorted array for verification
         System.out.println("Sorted Array: " + Arrays.toString(array));
     }
 
