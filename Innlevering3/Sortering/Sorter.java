@@ -1,3 +1,5 @@
+// Prekode fra: https://github.uio.no/IN2010/sortering-ressursside/tree/master/java-src
+
 import java.util.Arrays;
 
 abstract class Sorter {

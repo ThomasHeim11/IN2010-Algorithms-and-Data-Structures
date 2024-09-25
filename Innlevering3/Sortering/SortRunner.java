@@ -3,7 +3,7 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.stream.Collectors;
-
+// Prekode fra: https://github.uio.no/IN2010/sortering-ressursside/tree/master/java-src
 class SortRunner {
 
     // The student can adjust these parameters to conduct their experiments
