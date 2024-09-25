@@ -35,4 +35,9 @@ public class MovieGraph {
         }
 
     }
+    public static void main(String[] args) {
+        String moviesFile = "./movies.tsv";
+        String actorsFile = "./actors.tsv";
+
+    }
 }
