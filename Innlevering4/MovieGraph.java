@@ -66,7 +66,7 @@ public class MovieGraph {
          try (BufferedReader reader = new BufferedReader(new FileReader(moviesFile))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split("\t"); // Deler linjen opp i deler ved tabulator
+                String[] parts = line.split("\t"); // Deler linjen 
                 if (parts.length < 3) continue; // Hopper over linjer med færre enn tre kolonner
                 String ttId = parts[0]; // Filmens tt-ID
                 double rating = Double.parseDouble(parts[2]); // Filmens rating
@@ -83,7 +83,7 @@ public class MovieGraph {
         try (BufferedReader reader = new BufferedReader(new FileReader(actorsFile))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split("\t"); // Deler linjen opp i deler ved tabulator
+                String[] parts = line.split("\t"); // Deler linjen opp 
                 if (parts.length < 2) continue; // Hopper over linjer med færre enn to kolonner
                 String nmId = parts[0]; // Skuespillerens nm-ID
                 String name = parts[1]; // Skuespillerens navn
