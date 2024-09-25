@@ -26,5 +26,13 @@ public class MovieGraph {
         ActorNode actor1;
         ActorNode actor2;
 
+        Edge(String ttId, double rating, ActorNode actor1, ActorNode actor2){
+            this.ttId = ttId;
+            this.rating = rating;
+            this.actor1 = actor1;
+            this.actor2 = actor2;
+
+        }
+
     }
 }
