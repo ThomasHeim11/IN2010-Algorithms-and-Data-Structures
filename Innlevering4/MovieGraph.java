@@ -1,4 +1,3 @@
-import java.time.chrono.ThaiBuddhistChronology;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,8 +23,8 @@ public class MovieGraph {
     private static class Edge{
         String ttId;
         double rating;
-        this.actor1 = actor1;
-        this.actor2 = actor2;
+        ActorNode actor1;
+        ActorNode actor2;
 
     }
 }
