@@ -1,3 +1,7 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -55,9 +59,23 @@ public class MovieGraph {
         System.out.println("Oppgave 1");
         System.out.println("Nodes: " + nodeCount);
         System.out.println("Edges: " + edgeCount);
-
-
-        
-
+    }
+    //Metode for å laste inn filmratings
+    private static Map<String, Double> loadMovieRattings(String moviesFile){
+        Map<String,Double> movieRatings = new HashMap<>();
+         try (BufferedReader reader = new BufferedReader(new FileReader(moviesFile))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split("\t"); // Deler linjen opp i deler ved tabulator
+                if (parts.length < 3) continue; // Hopper over linjer med færre enn tre kolonner
+                String ttId = parts[0]; // Filmens tt-ID
+                double rating = Double.parseDouble(parts[2]); // Filmens rating
+                movieRatings.put(ttId, rating); // Legger tt-ID og rating til i movieRatings
+            }
+        } catch (IOException e) {
+            e.printStackTrace(); // Håndterer feil ved fillesing
+        }
+        return movieRatings; // Returnerer kartet med filmratings
+    }
     }
 }
