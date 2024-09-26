@@ -111,7 +111,7 @@ public class MovieGraph {
 
                 for (int i = 2; i < parts.length; i++) {
                     String ttId = parts[i];
-                    // Legger skuesoiller til filmen. 
+                    // Legger skuespiller til filmen. 
                     movieActorsMap.computeIfAbsent(ttId, k -> new HashSet<>()).add(nmId);
                 }
             }
