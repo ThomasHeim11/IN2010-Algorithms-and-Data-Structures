@@ -13,15 +13,13 @@ public class MovieGraph {
     private static class ActorNode {
         String id;
         String name;
-        // Set med kanter for skuespiller (filmer)
         Set<Edge> edges = new HashSet<>();
 
         ActorNode(String id, String name) {
             this.id = id;
             this.name = name;
         }
-
-        // Legger film til skuespiller.
+        // Legger til kant. 
         void addEdge(Edge edge) {
             edges.add(edge);
         }
@@ -42,120 +40,125 @@ public class MovieGraph {
 
         @Override
         public boolean equals(Object o) {
+            // sjekker om referasen til objektet er den samme. 
             if (this == o) return true;
+            // Sjekker om objektet er null eller om de er av forskjellige klasser
             if (o == null || getClass() != o.getClass()) return false;
             Edge edge = (Edge) o;
-            return actor1.equals(edge.actor1) && actor2.equals(edge.actor2) && ttId.equals(edge.ttId);
+            // Sjekker om film-ID ene er like og om skuespillerparene er like. 
+            return ttId.equals(edge.ttId) && (
+                    (actor1.equals(edge.actor1) && actor2.equals(edge.actor2)) ||
+                    (actor1.equals(edge.actor2) && actor2.equals(edge.actor1)));
         }
 
         @Override
         public int hashCode() {
-            return actor1.id.hashCode() + actor2.id.hashCode() + ttId.hashCode();
+            // Kobinerer hashkoder av film-ID og skuespiller-ID er for å generere en konsistent hashkode. 
+            return ttId.hashCode() + actor1.id.hashCode() + actor2.id.hashCode();
         }
     }
 
     public static void main(String[] args) {
-        // Stien til filene som tar utgangspunkt i at testfilene er i samme mappe.
         String moviesFile = "./movies.tsv";
         String actorsFile = "./actors.tsv";
-
-        // Laster inn filmratingene fra movies.tsv
+    // Les filmene og deres retninger fra filen og lagre i en mappe. 
         Map<String, Double> movieRatings = loadMovieRatings(moviesFile);
-        // Laster inn skuespillergrafen
         Map<String, ActorNode> actorGraph = loadActorGraph(actorsFile, movieRatings);
 
-        // Teller antall skuespillere
         int nodeCount = actorGraph.size();
-        // Teller antall filmer
         int edgeCount = countEdges(actorGraph);
 
-        // Skriver ut resultatene
         System.out.println("Oppgave 1");
         System.out.println("Nodes: " + nodeCount);
         System.out.println("Edges: " + edgeCount);
     }
-
-    // Metode for å laste inn filmratings
+    // Leser fil med filmdata og returnerer en map med ttId og rating
     private static Map<String, Double> loadMovieRatings(String moviesFile) {
         Map<String, Double> movieRatings = new HashMap<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(moviesFile))) {
             String line;
+            // Les linje for linje fra skuespilleren. 
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split("\t"); // Deler linjen
-                if (parts.length < 3) continue; // Hopper over linjer med færre enn tre kolonner
-                String ttId = parts[0]; // Filmens tt-ID
-                double rating = Double.parseDouble(parts[2]); // Filmens rating
-                movieRatings.put(ttId, rating); // Legger tt-ID og rating til i movieRatings
+                String[] parts = line.split("\t");
+                // Hopper over ufulsteningige linjer. 
+                if (parts.length < 3) continue;
+                String ttId = parts[0];
+                double rating = Double.parseDouble(parts[2]);
+                //Legger inn i map. 
+                movieRatings.put(ttId, rating);
             }
         } catch (IOException e) {
-            e.printStackTrace(); // Håndterer feil ved fillesing
+            e.printStackTrace();
         }
-        return movieRatings; // Returnerer kartet med filmratings
+        return movieRatings;
     }
-
-    // Metode for å laste inn skuespillergrafen fra actors.tsv
+    // Leser fil med skespillerdata og bygger opp en graf. 
     private static Map<String, ActorNode> loadActorGraph(String actorsFile, Map<String, Double> movieRatings) {
         Map<String, ActorNode> actorGraph = new HashMap<>();
-        // Map for å gruppere skuespillere etter filmer
         Map<String, Set<String>> movieActorsMap = new HashMap<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(actorsFile))) {
             String line;
+            // Leser linje for linje. 
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split("\t"); // Deler linjen opp
-                if (parts.length < 2) continue; // Hopper over linjer med færre enn to kolonner
-                String nmId = parts[0]; // Skuespillerens nm-ID
-                String name = parts[1]; // Skuespillerens navn
-                ActorNode actor = new ActorNode(nmId, name); // Oppretter en node for skuespilleren
-
-                // Legger skuespilleren til i grafen
+                String[] parts = line.split("\t");
+                if (parts.length < 2) continue;
+                String nmId = parts[0];
+                String name = parts[1];
+                ActorNode actor = new ActorNode(nmId, name);
+                // Legger inn i grafen. 
                 actorGraph.put(nmId, actor);
 
-                // For hver film skuespilleren har vært med i
                 for (int i = 2; i < parts.length; i++) {
                     String ttId = parts[i];
+                    // Legger skuesoiller til filmen. 
                     movieActorsMap.computeIfAbsent(ttId, k -> new HashSet<>()).add(nmId);
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace(); // Håndterer feil ved fillesing
+            e.printStackTrace();
         }
-
-        // Nå som vi har gruppert skuespillerne etter filmer, kan vi opprette kanter
+        // Bygger grafen, kobler skuespillere med filmene de deltok i. 
         for (Map.Entry<String, Set<String>> entry : movieActorsMap.entrySet()) {
+            // Henter filmens ID (ttId) og sett av skuespillere (actorIds) som deltok i filmen.
             String ttId = entry.getKey();
             Set<String> actorIds = entry.getValue();
+
+            // Sjekker om filmen finnes i movieRatings mappen.
             if (movieRatings.containsKey(ttId)) {
+                //Sjekker om filmen finnes i ratingmap. 
                 double rating = movieRatings.get(ttId);
-                // Opprett kanter mellom alle par av skuespillere i den samme filmen
-                for (String actorId1 : actorIds) {
-                    for (String actorId2 : actorIds) {
-                        if (!actorId1.equals(actorId2)) {
-                            if (actorId1.compareTo(actorId2) < 0) {
-                                ActorNode actor1 = actorGraph.get(actorId1);
-                                ActorNode actor2 = actorGraph.get(actorId2);
-                                if (actor1 != null && actor2 != null) {
-                                    Edge edge = new Edge(ttId, rating, actor1, actor2);
-                                    actor1.addEdge(edge);
-                                    actor2.addEdge(edge);
-                                }
-                            }
-                        }
+                // Konverterer settet med skuespiller ID-er til en array for enklere tilgang.
+                String[] actorArray = actorIds.toArray(new String[0]);
+                // Går gjennom alle kombinasjoner av par med skuespillere fra filmen. 
+                for (int i = 0; i < actorArray.length; i++) {
+                    // Henter første skuespiller i parret. 
+                    ActorNode actor1 = actorGraph.get(actorArray[i]);
+                    // sjekker at skuespilleren finnes i grafen 
+                    if (actor1 == null) continue;
+                    // nøstet-løkke for å kombinere skuespiller 1 med påfølgende skuespiller. 
+                    for (int j = i + 1; j < actorArray.length; j++) {
+                        // Henter andre skespiller i parret. 
+                        ActorNode actor2 = actorGraph.get(actorArray[j]);
+                        // Sjekker om skuespiller finnes i graf. 
+                        if (actor2 == null) continue;
+                        // Oppretter ny kant for filmen og kobler de to skuespillerne 
+                        Edge edge = new Edge(ttId, rating, actor1, actor2);
+                        actor1.addEdge(edge);
+                        actor2.addEdge(edge);
                     }
                 }
             }
         }
 
-        return actorGraph; // Returnerer skuespillergrafen
+        return actorGraph;
     }
-
-    // Metode for å telle antall kanter i grafen
+    // Teller antall kanter i grafen. 
     private static int countEdges(Map<String, ActorNode> actorGraph) {
-        // Bruker et Set for å unngå duplikate kanter
         Set<Edge> edges = new HashSet<>();
         for (ActorNode actor : actorGraph.values()) {
-            edges.addAll(actor.edges); // Legger til alle kanter for hver skuespiller
+            edges.addAll(actor.edges);
         }
-        return edges.size(); // Returnerer antall kanter
+        return edges.size();
     }
 }
