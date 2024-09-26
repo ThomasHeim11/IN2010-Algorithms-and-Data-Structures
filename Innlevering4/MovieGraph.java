@@ -157,6 +157,7 @@ public class MovieGraph {
     private static int countEdges(Map<String, ActorNode> actorGraph) {
         Set<Edge> edges = new HashSet<>();
         for (ActorNode actor : actorGraph.values()) {
+            // legger til alle kanter fra hver skuespiller. 
             edges.addAll(actor.edges);
         }
         return edges.size();
