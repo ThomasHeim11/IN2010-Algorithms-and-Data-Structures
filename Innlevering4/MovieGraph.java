@@ -10,7 +10,7 @@ import java.util.Set;
 public class MovieGraph {
 
     // Node som representerer skuespillere.
-    private static class ActorNode {
+    protected  static class ActorNode {
         String id;
         String name;
         Set<Edge> edges = new HashSet<>();
@@ -25,7 +25,7 @@ public class MovieGraph {
         }
     }
     // Egen klasse for kanter. 
-    private static class Edge {
+    protected  static class Edge {
         String ttId;
         double rating;
         ActorNode actor1;
@@ -77,7 +77,7 @@ public class MovieGraph {
         System.out.println("Edges: " + edgeCount);
     }
     // Leser fil med filmdata og returnerer en map med ttId og rating
-    private static Map<String, Double> loadMovieRatings(String moviesFile) {
+    protected  static Map<String, Double> loadMovieRatings(String moviesFile) {
         Map<String, Double> movieRatings = new HashMap<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(moviesFile))) {
             String line;
@@ -97,7 +97,7 @@ public class MovieGraph {
         return movieRatings;
     }
     // Leser fil med skespillerdata og bygger opp en graf. 
-    private static Map<String, ActorNode> loadActorGraph(String actorsFile, Map<String, Double> movieRatings) {
+    protected  static Map<String, ActorNode> loadActorGraph(String actorsFile, Map<String, Double> movieRatings) {
         Map<String, ActorNode> actorGraph = new HashMap<>();
         Map<String, Set<String>> movieActorsMap = new HashMap<>();
 
@@ -158,7 +158,7 @@ public class MovieGraph {
         return actorGraph;
     }
     // Teller antall kanter i grafen. 
-    private static int countEdges(Map<String, ActorNode> actorGraph) {
+    protected  static int countEdges(Map<String, ActorNode> actorGraph) {
         Set<Edge> edges = new HashSet<>();
         for (ActorNode actor : actorGraph.values()) {
             // legger til alle kanter fra hver skuespiller. 
