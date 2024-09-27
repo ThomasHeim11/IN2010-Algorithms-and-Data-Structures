@@ -24,7 +24,7 @@ public class MovieGraph {
             edges.add(edge);
         }
     }
-
+    // Egen klasse for kanter. 
     private static class Edge {
         String ttId;
         double rating;
@@ -37,7 +37,11 @@ public class MovieGraph {
             this.actor1 = actor1;
             this.actor2 = actor2;
         }
-
+        /** 
+         * Overstyrer equals-metoden for å definere logikken for likhet mellom to Edge-objekter. 
+         * To Edge-objekter anses som like hvis de har samme film-ID (ttId) og samme par av skuespillere
+         * (uavhengig av rekkefølgen på skuespillerne).
+         */
         @Override
         public boolean equals(Object o) {
             // sjekker om referasen til objektet er den samme. 
