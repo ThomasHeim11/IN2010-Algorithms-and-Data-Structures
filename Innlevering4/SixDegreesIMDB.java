@@ -58,13 +58,18 @@ public class SixDegreesIMDB {
         // Legg til startnode i besøkte noder og køen
         visited.put(s, true);
         queue.add(s);
+        //@audit logging
+        System.out.println("Starter BFS fra " + s.name);
 
         // Utfør bredde-først søk
         while (!queue.isEmpty()) {
             MovieGraph.ActorNode current = queue.poll();
+            //@audit
+            // System.out.println("Besøker node " + current.name);
 
             // Hvis vi har nådd målskuespilleren, avslutt
             if (current.equals(goalNode)) {
+                System.out.println("Nådde målet: " + goalNode.name);
                 return;
             }
 
@@ -74,6 +79,8 @@ public class SixDegreesIMDB {
                 
                 // Hvis naboskuespilleren ikke er besøkt, legg til i besøkt, kø, og oppdater sti
                 if (!visited.getOrDefault(neighbor, false)) {
+                    //@audit logging
+                    // System.out.println("Legger til nabo " + neighbor.name + " via film " + edge.ttId);
                     visited.put(neighbor, true);
                     queue.add(neighbor);
                     previous.put(neighbor, current);
@@ -81,11 +88,27 @@ public class SixDegreesIMDB {
                 }
             }
         }
+        // @audit
+         if (!visited.getOrDefault(goalNode, false)) {
+        System.out.println("Målskuespilleren " + goalNode.name + " ble ikke funnet fra " + s.name);
     }
+}
 
-    private static void printPath(Map<MovieGraph.ActorNode, MovieGraph.ActorNode> previous, Map<MovieGraph.ActorNode, MovieGraph.Edge> movieEdge, MovieGraph.ActorNode startNode, MovieGraph.ActorNode goalNode) {
+    private static void printPath(Map<MovieGraph.ActorNode, MovieGraph.ActorNode> previous,
+                              Map<MovieGraph.ActorNode, MovieGraph.Edge> movieEdge,
+                              MovieGraph.ActorNode startNode,
+                              MovieGraph.ActorNode goalNode) {
+    //@audit
+    if (!previous.containsKey(goalNode)) {
+        System.out.println("Ingen sti funnet mellom " + startNode.name + " og " + goalNode.name);
+        return;
+    }
+            
         List<MovieGraph.ActorNode> path = new LinkedList<>();
         List<MovieGraph.Edge> movies = new LinkedList<>();
+
+        //@audit
+        System.out.println("Rekonstruerer stien fra " + goalNode.name + " til " + startNode.name);
 
         // Rekonstruer stien ved å følge 'previous' tilbake fra mål til start
         for (MovieGraph.ActorNode at = goalNode; at != null; at = previous.get(at)) {
@@ -93,12 +116,21 @@ public class SixDegreesIMDB {
             if (movieEdge.get(at) != null) {
                 movies.add(movieEdge.get(at));
             }
+            System.out.println("La til spiller: " + at.name);
         }
 
         // Snur listen for å få korrekt rekkefølge fra start til mål
         Collections.reverse(path);
         Collections.reverse(movies);
 
+        //@audit
+        if(path.isEmpty() || !path.get(0).equals(startNode)){
+             System.out.println("Noe gikk galt ved rekonstruksjonen av stien.");
+        return;
+    }
+        
+
+        System.out.println("Sti rekonstruksjon ferdig:");
         // Skriv ut stien med skuespillernavn og film det er tilkoblet
         System.out.println(path.get(0).name);
         for (int i = 1; i < path.size(); i++) {
