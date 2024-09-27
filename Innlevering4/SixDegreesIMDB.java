@@ -104,7 +104,9 @@ public class SixDegreesIMDB {
         for (int i = 1; i < path.size(); i++) {
             MovieGraph.Edge edge = movies.get(i - 1);
             MovieGraph.ActorNode actor = path.get(i);
-            System.out.println("===[ " + edge.ttId + " (" + edge.rating + ") ] ===> " + actor.name);
+            String movieTitle = MovieGraph.getMovieTitle(edge.ttId);
+            System.out.println("===[ " + movieTitle + " (" + edge.rating + ") ] ===> " + actor.name);
+
         }
     }
 }

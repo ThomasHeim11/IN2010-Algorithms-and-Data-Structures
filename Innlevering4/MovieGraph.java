@@ -9,6 +9,9 @@ import java.util.Set;
 // Klasse som representerer grafen for filmdata.
 public class MovieGraph {
 
+    //@audit
+    protected  static Map<String,String> movieTitles = new HashMap<>();
+
     // Node som representerer skuespillere.
     protected  static class ActorNode {
         String id;
@@ -87,9 +90,11 @@ public class MovieGraph {
                 // Hopper over ufulsteningige linjer. 
                 if (parts.length < 3) continue;
                 String ttId = parts[0];
+                String title = parts[1];
                 double rating = Double.parseDouble(parts[2]);
                 //Legger inn i map. 
                 movieRatings.put(ttId, rating);
+                movieTitles.put(ttId,title);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -165,5 +170,9 @@ public class MovieGraph {
             edges.addAll(actor.edges);
         }
         return edges.size();
+    }
+    //@audit ny for six SixDegreesIMDB
+    public static String getMovieTitle(String ttId){
+        return movieTitles.getOrDefault(ttId,"Unknown Tittle");
     }
 }
