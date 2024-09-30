@@ -69,7 +69,8 @@ public class SixDegreesIMDB {
 
             // Hvis vi har nådd målskuespilleren, avslutt
             if (current.equals(goalNode)) {
-                System.out.println("Nådde målet: " + goalNode.name);
+                //@audit
+                // System.out.println("Nådde målet: " + goalNode.name);
                 return;
             }
 
@@ -108,7 +109,7 @@ public class SixDegreesIMDB {
         List<MovieGraph.Edge> movies = new LinkedList<>();
 
         //@audit
-        System.out.println("Rekonstruerer stien fra " + goalNode.name + " til " + startNode.name);
+        // System.out.println("Rekonstruerer stien fra " + goalNode.name + " til " + startNode.name);
 
         // Rekonstruer stien ved å følge 'previous' tilbake fra mål til start
         for (MovieGraph.ActorNode at = goalNode; at != null; at = previous.get(at)) {
@@ -116,7 +117,8 @@ public class SixDegreesIMDB {
             if (movieEdge.get(at) != null) {
                 movies.add(movieEdge.get(at));
             }
-            System.out.println("La til spiller: " + at.name);
+            //@audit
+            // System.out.println("La til spiller: " + at.name);
         }
 
         // Snur listen for å få korrekt rekkefølge fra start til mål
@@ -130,7 +132,7 @@ public class SixDegreesIMDB {
     }
         
 
-        System.out.println("Sti rekonstruksjon ferdig:");
+        // System.out.println("Sti rekonstruksjon ferdig:");
         // Skriv ut stien med skuespillernavn og film det er tilkoblet
         System.out.println(path.get(0).name);
         for (int i = 1; i < path.size(); i++) {
