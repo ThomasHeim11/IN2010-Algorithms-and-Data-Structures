@@ -4,7 +4,7 @@ import java.util.*;
 public class SixDegreesIMDB {
     public static void main(String[] args) {
         MovieGraph movieGraph = new MovieGraph();
-
+        
         try {
             movieGraph.buildGraph("movies.tsv", "actors.tsv");
         } catch (IOException e) {
@@ -13,16 +13,16 @@ public class SixDegreesIMDB {
         }
 
         String[][] queries = {
-              {"nm2255973", "nm0000460", "Donald Glover", "Jeremy Irons"},
-              {"nm0424060", "nm8076281", "Scarlett Johansson", "Emma Mackey"},
-              {"nm4689420", "nm0000365", "Carrie Coon", "Julie Delpy"},
-              {"nm0000288", "nm2143282", "Christian Bale", "Lupita Nyong'o"},
-              {"nm0637259", "nm0931324", "Tuva Novotny", "Michael K. Williams"}
+            {"nm2255973", "nm0000460", "Donald Glover", "Jeremy Irons"},
+            {"nm0424060", "nm8076281", "Scarlett Johansson", "Emma Mackey"},
+            {"nm4689420", "nm0000365", "Carrie Coon", "Julie Delpy"},
+            {"nm0000288", "nm2143282", "Christian Bale", "Lupita Nyong'o"},
+            {"nm0637259", "nm0931324", "Tuva Novotny", "Michael K. Williams"}
         };
 
         System.out.println("Oppgave 2");
         for (String[] query : queries) {
-            System.out.println(query[2]);
+            System.out.println(query[2] + " til " + query[3] + ":");
             findShortestPath(movieGraph, query[0], query[1]);
         }
     }
@@ -38,11 +38,6 @@ public class SixDegreesIMDB {
 
         while (!queue.isEmpty()) {
             MovieGraph.ActorNode current = queue.poll();
-
-            if (current.equals(goalNode)) {
-                return;
-            }
-
             for (MovieGraph.Movie movie : current.movies) {
                 for (MovieGraph.ActorNode neighbor : movie.actors) {
                     if (!visited.contains(neighbor)) {

@@ -17,6 +17,10 @@ public class MovieGraph {
         return actors.get(actorID);
     }
 
+    public Collection<ActorNode> getAllActorNodes() {
+        return actors.values();
+    }
+
     public void addActor(String actorID, String actorName) {
         actors.putIfAbsent(actorID, new ActorNode(actorID, actorName));
     }
@@ -48,7 +52,7 @@ public class MovieGraph {
         }
         return edges / 2;
     }
-
+    
     public void buildGraph(String moviesFile, String actorsFile) throws IOException {
         // Les films
         try (BufferedReader br = new BufferedReader(new FileReader(moviesFile))) {
@@ -108,15 +112,20 @@ public class MovieGraph {
         }
     }
 
-    // Simple test method to verify the graph
     public static void main(String[] args) {
         MovieGraph movieGraph = new MovieGraph();
+
         try {
             movieGraph.buildGraph("movies.tsv", "actors.tsv");
-            System.out.println("Nodes: " + movieGraph.countNodes());
-            System.out.println("Edges: " + movieGraph.countEdges());
         } catch (IOException e) {
             e.printStackTrace();
+            return;
         }
+
+        int nodeCount = movieGraph.countNodes();
+        int edgeCount = movieGraph.countEdges();
+
+        System.out.println("Antall noder: " + nodeCount);
+        System.out.println("Antall kanter: " + edgeCount);
     }
 }
