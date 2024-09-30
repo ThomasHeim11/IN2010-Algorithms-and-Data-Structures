@@ -2,9 +2,12 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MovieGraph {
     
+    private static final Logger LOGGER = Logger.getLogger(MovieGraph.class.getName());
     protected static Map<String, String> movieTitles = new HashMap<>();
     
     protected static class ActorNode {
@@ -70,7 +73,7 @@ public class MovieGraph {
                 movieTitles.put(ttId, title);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Failed to load movie ratings", e);
         }
         return movieRatings;
     }
@@ -95,7 +98,7 @@ public class MovieGraph {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Failed to load actor graph", e);
         }
         
         for (Map.Entry<String, Set<String>> entry : movieActorsMap.entrySet()) {
