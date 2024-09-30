@@ -1,10 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class MovieGraph {
     
@@ -94,10 +91,7 @@ public class MovieGraph {
                 
                 for (int i = 2; i < parts.length; i++) {
                     String ttId = parts[i];
-                    if (!movieActorsMap.containsKey(ttId)) {
-                        movieActorsMap.put(ttId, new HashSet<>());
-                    }
-                    movieActorsMap.get(ttId).add(nmId);
+                    movieActorsMap.computeIfAbsent(ttId, k -> new HashSet<>()).add(nmId);
                 }
             }
         } catch (IOException e) {
@@ -110,12 +104,12 @@ public class MovieGraph {
             
             if (movieRatings.containsKey(ttId)) {
                 double rating = movieRatings.get(ttId);
-                String[] actorArray = actorIds.toArray(new String[0]);
-                for (int i = 0; i < actorArray.length; i++) {
-                    ActorNode actor1 = actorGraph.get(actorArray[i]);
+                List<String> actorList = new ArrayList<>(actorIds);  // Convert Set to List for easier indexing
+                for (int i = 0; i < actorList.size(); i++) {
+                    ActorNode actor1 = actorGraph.get(actorList.get(i));
                     if (actor1 == null) continue;
-                    for (int j = i + 1; j < actorArray.length; j++) {
-                        ActorNode actor2 = actorGraph.get(actorArray[j]);
+                    for (int j = i + 1; j < actorList.size(); j++) {
+                        ActorNode actor2 = actorGraph.get(actorList.get(j));
                         if (actor2 == null) continue;
                         
                         Edge edge = new Edge(ttId, rating, actor1, actor2);
