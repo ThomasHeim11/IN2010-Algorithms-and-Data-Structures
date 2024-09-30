@@ -28,63 +28,76 @@ public class SixDegreesIMDB {
     }
 
     private static void BFSVisit(MovieGraph.ActorNode startNode, MovieGraph.ActorNode goalNode,
-                                 Map<MovieGraph.ActorNode, MovieGraph.ActorNode> previous,
-                                 Map<MovieGraph.ActorNode, MovieGraph.Movie> movieEdge) {
-        Queue<MovieGraph.ActorNode> queue = new LinkedList<>();
-        Set<MovieGraph.ActorNode> visited = new HashSet<>();
+                             Map<MovieGraph.ActorNode, MovieGraph.ActorNode> previous,
+                             Map<MovieGraph.ActorNode, MovieGraph.Movie> movieEdge) {
+    Queue<MovieGraph.ActorNode> queue = new LinkedList<>();
+    Set<MovieGraph.ActorNode> visited = new HashSet<>();
 
-        queue.add(startNode);
-        visited.add(startNode);
+    System.out.println("Starting BFS from: " + startNode.name);
+    System.out.println("Goal node: " + goalNode.name);
 
-        while (!queue.isEmpty()) {
-            MovieGraph.ActorNode current = queue.poll();
-            for (MovieGraph.Movie movie : current.movies) {
-                for (MovieGraph.ActorNode neighbor : movie.actors) {
-                    if (!visited.contains(neighbor)) {
-                        visited.add(neighbor);
-                        queue.add(neighbor);
-                        previous.put(neighbor, current);
-                        movieEdge.put(neighbor, movie);
+    queue.add(startNode);
+    visited.add(startNode);
 
-                        if (neighbor.equals(goalNode)) {
-                            return;
-                        }
+    while (!queue.isEmpty()) {
+        MovieGraph.ActorNode current = queue.poll();
+
+        for (MovieGraph.Movie movie : current.movies) {
+            for (MovieGraph.ActorNode neighbor : movie.actors) {
+                if (!visited.contains(neighbor)) {
+                    visited.add(neighbor);
+                    queue.add(neighbor);
+                    previous.put(neighbor, current);
+                    movieEdge.put(neighbor, movie);
+
+                    // System.out.println("Added to queue: " + neighbor.name + " via movie: " + movie.title);
+
+                    if (neighbor.equals(goalNode)) {
+                        System.out.println("Goal node " + goalNode.name + " found!");
+                        return;
                     }
                 }
             }
         }
     }
+}
 
-    private static void printPath(MovieGraph.ActorNode startNode, MovieGraph.ActorNode goalNode,
-                                  Map<MovieGraph.ActorNode, MovieGraph.ActorNode> previous,
-                                  Map<MovieGraph.ActorNode, MovieGraph.Movie> movieEdge) {
-        List<MovieGraph.ActorNode> path = new ArrayList<>();
-        List<MovieGraph.Movie> movies = new ArrayList<>();
 
-        for (MovieGraph.ActorNode at = goalNode; at != null; at = previous.get(at)) {
-            path.add(at);
-            if (previous.get(at) != null) {
-                movies.add(movieEdge.get(at));
-            }
+private static void printPath(MovieGraph.ActorNode startNode, MovieGraph.ActorNode goalNode,
+                              Map<MovieGraph.ActorNode, MovieGraph.ActorNode> previous,
+                              Map<MovieGraph.ActorNode, MovieGraph.Movie> movieEdge) {
+    List<MovieGraph.ActorNode> path = new ArrayList<>();
+    List<MovieGraph.Movie> movies = new ArrayList<>();
+
+    for (MovieGraph.ActorNode at = goalNode; at != null; at = previous.get(at)) {
+        path.add(at);
+        if (previous.get(at) != null) {
+            movies.add(movieEdge.get(at));
         }
+    }
 
-        Collections.reverse(path);
-        Collections.reverse(movies);
+    Collections.reverse(path);
+    Collections.reverse(movies);
 
+    System.out.println("Constructed path from " + startNode.name + " to " + goalNode.name + ":");
+    if (!path.isEmpty()) {
         Iterator<MovieGraph.ActorNode> pathIterator = path.iterator();
         Iterator<MovieGraph.Movie> movieIterator = movies.iterator();
 
-        if (pathIterator.hasNext()) {
-            MovieGraph.ActorNode actor = pathIterator.next();
-            System.out.println(actor.name);
+        MovieGraph.ActorNode actor = pathIterator.next();
+        System.out.print(actor.name);
 
-            while (pathIterator.hasNext() && movieIterator.hasNext()) {
-                MovieGraph.Movie movie = movieIterator.next();
-                actor = pathIterator.next();
-                System.out.println("===[ " + movie.title + " (" + movie.rating + ") ] ===> " + actor.name);
-            }
+        while (pathIterator.hasNext() && movieIterator.hasNext()) {
+            MovieGraph.Movie movie = movieIterator.next();
+            actor = pathIterator.next();
+            System.out.print(" ===[ " + movie.title + " (" + movie.rating + ") ]===> " + actor.name);
         }
+        System.out.println();
+    } else {
+        System.out.println("No path found.");
     }
+}
+
 
     public static void findShortestPath(MovieGraph movieGraph, String startActorID, String goalActorID) {
         MovieGraph.ActorNode startNode = movieGraph.getActorNode(startActorID);
