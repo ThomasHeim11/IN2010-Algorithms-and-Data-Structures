@@ -40,6 +40,7 @@ public class MovieGraph {
             this.actor1 = actor1;
             this.actor2 = actor2;
         }
+        // @audit Årsak til feil sti for mellomledd?
         /** 
          * Overstyrer equals-metoden for å definere logikken for likhet mellom to Edge-objekter. 
          * To Edge-objekter anses som like hvis de har samme film-ID (ttId) og samme par av skuespillere
@@ -57,7 +58,7 @@ public class MovieGraph {
                     (actor1.equals(edge.actor1) && actor2.equals(edge.actor2)) ||
                     (actor1.equals(edge.actor2) && actor2.equals(edge.actor1)));
         }
-
+    // @audit Årsak til feil sti for mellomledd?
         @Override
         public int hashCode() {
             // Kobinerer hashkoder av film-ID og skuespiller-ID er for å generere en konsistent hashkode. 
@@ -172,7 +173,11 @@ public class MovieGraph {
         return edges.size();
     }
     //@audit ny for six SixDegreesIMDB
-    public static String getMovieTitle(String ttId){
-        return movieTitles.getOrDefault(ttId,"Unknown Tittle");
+     public static String getMovieTitle(String ttId) {
+        if (movieTitles.containsKey(ttId)) {
+            return movieTitles.get(ttId);
+        } else {
+            return "Unknown Title";
+        }
     }
 }

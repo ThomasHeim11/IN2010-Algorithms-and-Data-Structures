@@ -59,7 +59,7 @@ public class SixDegreesIMDB {
         visited.put(s, true);
         queue.add(s);
         //@audit logging
-        System.out.println("Starter BFS fra " + s.name);
+        // System.out.println("Starter BFS fra " + s.name);
 
         // Utfør bredde-først søk
         while (!queue.isEmpty()) {
