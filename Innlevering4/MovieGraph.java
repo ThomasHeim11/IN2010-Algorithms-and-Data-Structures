@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.util.*;
 
 public class MovieGraph {
-    protected  Map<String, ActorNode> actors;
-    protected  Map<String, Movie> movies;
-    protected  List<Edge> edges;
+    protected Map<String, ActorNode> actors;
+    protected Map<String, Movie> movies;
+    protected List<Edge> edges;
 
     // Constructor
     public MovieGraph() {
@@ -43,25 +43,35 @@ public class MovieGraph {
             actor.movies.add(movie);
             movie.actors.add(actor);
 
-        // @audit Lager kanter mellom alle skuespillere i filmene.
-        for(ActorNode coActor: movie.actors){
-            if(!coActor.id.equals(actorID)){
-                edges.add(new Edge(actor,coActor,movie.title,movie.rating));
+            // Lag kanter mellom alle skuespillere i filmen.
+            for (ActorNode coActor : movie.actors) {
+                if (!coActor.id.equals(actorID)) {
+                    edges.add(new Edge(actor, coActor, movie.title, movie.rating));
+                }
             }
         }
     }
-}
 
     public int countNodes() {
         return actors.size();
     }
-    //@audit
+
     public int countEdges() {
         return edges.size();
     }
-    
+
+    public List<Edge> getEdgesForActor(ActorNode actor) {
+        List<Edge> relevantEdges = new ArrayList<>();
+        for (Edge edge : edges) {
+            if (edge.actor1.equals(actor) || edge.actor2.equals(actor)) {
+                relevantEdges.add(edge);
+            }
+        }
+        return relevantEdges;
+    }
+
     public void buildGraph(String moviesFile, String actorsFile) throws IOException {
-        // Read movies
+        // Les filmer
         try (BufferedReader br = new BufferedReader(new FileReader(moviesFile))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -73,7 +83,7 @@ public class MovieGraph {
             }
         }
 
-        // Read actors
+        // Les skuespillere
         try (BufferedReader br = new BufferedReader(new FileReader(actorsFile))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -92,7 +102,7 @@ public class MovieGraph {
         }
     }
 
-    // Inner classes for Actor and Movie
+    // Indre klasser
     static class ActorNode {
         String id;
         String name;
@@ -118,13 +128,14 @@ public class MovieGraph {
             this.actors = new ArrayList<>();
         }
     }
-    static  class Edge{
+
+    static class Edge {
         ActorNode actor1;
         ActorNode actor2;
         String movieTitle;
         double rating;
 
-        Edge(ActorNode actor1, ActorNode actor2, String moiveTitle,double rating){
+        Edge(ActorNode actor1, ActorNode actor2, String movieTitle, double rating) {
             this.actor1 = actor1;
             this.actor2 = actor2;
             this.movieTitle = movieTitle;
