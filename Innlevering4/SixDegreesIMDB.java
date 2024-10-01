@@ -30,11 +30,12 @@ public class SixDegreesIMDB {
     private static void BFSVisit(MovieGraph.ActorNode startNode, MovieGraph.ActorNode goalNode,
                              Map<MovieGraph.ActorNode, MovieGraph.ActorNode> previous,
                              Map<MovieGraph.ActorNode, MovieGraph.Movie> movieEdge) {
+    //@audit correct?
     Queue<MovieGraph.ActorNode> queue = new LinkedList<>();
     Set<MovieGraph.ActorNode> visited = new HashSet<>();
-
-    System.out.println("Starting BFS from: " + startNode.name);
-    System.out.println("Goal node: " + goalNode.name);
+    //@audit
+    // System.out.println("Starting BFS from: " + startNode.name);
+    // System.out.println("Goal node: " + goalNode.name);
 
     queue.add(startNode);
     visited.add(startNode);
@@ -53,7 +54,8 @@ public class SixDegreesIMDB {
                     // System.out.println("Added to queue: " + neighbor.name + " via movie: " + movie.title);
 
                     if (neighbor.equals(goalNode)) {
-                        System.out.println("Goal node " + goalNode.name + " found!");
+                        //@audit
+                        // System.out.println("Goal node " + goalNode.name + " found!");
                         return;
                     }
                 }
@@ -68,18 +70,18 @@ private static void printPath(MovieGraph.ActorNode startNode, MovieGraph.ActorNo
                               Map<MovieGraph.ActorNode, MovieGraph.Movie> movieEdge) {
     List<MovieGraph.ActorNode> path = new ArrayList<>();
     List<MovieGraph.Movie> movies = new ArrayList<>();
-
-    for (MovieGraph.ActorNode at = goalNode; at != null; at = previous.get(at)) {
-        path.add(at);
-        if (previous.get(at) != null) {
-            movies.add(movieEdge.get(at));
-        }
+    //@audit ny kode
+    MovieGraph.ActorNode graphNode = goalNode;
+    while(graphNode != null && graphNode != startNode){
+        path.add(graphNode);
+        movies.add(movieEdge.get(graphNode));
+        graphNode = previous.get(graphNode);
     }
-
+    path.add(startNode);
     Collections.reverse(path);
     Collections.reverse(movies);
-
-    System.out.println("Constructed path from " + startNode.name + " to " + goalNode.name + ":");
+    //@audit
+    // System.out.println("Constructed path from " + startNode.name + " to " + goalNode.name + ":");
     if (!path.isEmpty()) {
         Iterator<MovieGraph.ActorNode> pathIterator = path.iterator();
         Iterator<MovieGraph.Movie> movieIterator = movies.iterator();

@@ -4,13 +4,15 @@ import java.io.IOException;
 import java.util.*;
 
 public class MovieGraph {
-    private Map<String, ActorNode> actors;
-    private Map<String, Movie> movies;
+    protected  Map<String, ActorNode> actors;
+    protected  Map<String, Movie> movies;
+    protected  List<Edge> edges;
 
     // Constructor
     public MovieGraph() {
         actors = new HashMap<>();
         movies = new HashMap<>();
+        edges = new ArrayList<>();
     }
 
     public ActorNode getActorNode(String actorID) {
@@ -40,21 +42,22 @@ public class MovieGraph {
         if (movie != null && actor != null) {
             actor.movies.add(movie);
             movie.actors.add(actor);
+
+        // @audit Lager kanter mellom alle skuespillere i filmene.
+        for(ActorNode coActor: movie.actors){
+            if(!coActor.id.equals(actorID)){
+                edges.add(new Edge(actor,coActor,movie.title,movie.rating));
+            }
         }
     }
+}
 
     public int countNodes() {
         return actors.size();
     }
-
+    //@audit
     public int countEdges() {
-        int edges = 0;
-        for (ActorNode actor : actors.values()) {
-            for (Movie movie : actor.movies) {
-                edges += movie.actors.size() - 1;
-            }
-        }
-        return edges / 2;
+        return edges.size();
     }
     
     public void buildGraph(String moviesFile, String actorsFile) throws IOException {
@@ -113,6 +116,19 @@ public class MovieGraph {
             this.title = title;
             this.rating = rating;
             this.actors = new ArrayList<>();
+        }
+    }
+    static  class Edge{
+        ActorNode actor1;
+        ActorNode actor2;
+        String movieTitle;
+        double rating;
+
+        Edge(ActorNode actor1, ActorNode actor2, String moiveTitle,double rating){
+            this.actor1 = actor1;
+            this.actor2 = actor2;
+            this.movieTitle = movieTitle;
+            this.rating = rating;
         }
     }
 
