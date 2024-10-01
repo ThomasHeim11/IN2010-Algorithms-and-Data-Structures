@@ -13,11 +13,11 @@ public class SixDegreesIMDB {
         }
 
         String[][] queries = {
-                {"nm2255973", "nm0000460", "Donald Glover", "Jeremy Irons"},
-                {"nm0424060", "nm8076281", "Scarlett Johansson", "Emma Mackey"},
-                {"nm4689420", "nm0000365", "Carrie Coon", "Julie Delpy"},
-                {"nm0000288", "nm2143282", "Christian Bale", "Lupita Nyong'o"},
-                {"nm0637259", "nm0931324", "Tuva Novotny", "Michael K. Williams"}
+            {"nm2255973", "nm0000460", "Donald Glover", "Jeremy Irons"},
+            {"nm0424060", "nm8076281", "Scarlett Johansson", "Emma Mackey"},
+            {"nm4689420", "nm0000365", "Carrie Coon", "Julie Delpy"},
+            {"nm0000288", "nm2143282", "Christian Bale", "Lupita Nyong'o"},
+            {"nm0637259", "nm0931324", "Tuva Novotny", "Michael K. Williams"}
         };
 
         System.out.println("Oppgave 2");
@@ -29,9 +29,8 @@ public class SixDegreesIMDB {
     }
 
     private static void BFSVisit(MovieGraph.ActorNode startNode, MovieGraph.ActorNode goalNode,
-                                 Map<MovieGraph.ActorNode, MovieGraph.ActorNode> previous,
-                                 Map<MovieGraph.ActorNode, String> movieEdge,
-                                 Map<MovieGraph.ActorNode, Double> movieRating, MovieGraph graph) {
+                                 Map<MovieGraph.ActorNode, MovieGraph.Edge> previous,
+                                 MovieGraph graph) {
         Queue<MovieGraph.ActorNode> queue = new LinkedList<>();
         Set<MovieGraph.ActorNode> visited = new HashSet<>();
 
@@ -41,65 +40,41 @@ public class SixDegreesIMDB {
         while (!queue.isEmpty()) {
             MovieGraph.ActorNode currentNode = queue.poll();
 
-            for (MovieGraph.Edge edge : graph.getEdgesForActor(currentNode)) {
-                MovieGraph.ActorNode neighbor = edge.actor1.equals(currentNode) ? edge.actor2 : edge.actor1;
-                if (!visited.contains(neighbor)) {
-                    visited.add(neighbor);
-                    previous.put(neighbor, currentNode);
-                    movieEdge.put(neighbor, edge.movieTitle);
-                    movieRating.put(neighbor, edge.rating);
+            for (MovieGraph.Movie movie : currentNode.movies) {
+                for (MovieGraph.ActorNode neighbor : movie.actors) {
+                    if (!visited.contains(neighbor)) {
+                        visited.add(neighbor);
+                        previous.put(neighbor, new MovieGraph.Edge(currentNode, neighbor, movie.title, movie.rating));
 
-                    if (neighbor.equals(goalNode)) {
-                        return;
+                        if (neighbor.equals(goalNode)) {
+                            return;
+                        }
+
+                        queue.add(neighbor);
                     }
-
-                    queue.add(neighbor);
                 }
             }
         }
     }
 
     private static void printPath(MovieGraph.ActorNode startNode, MovieGraph.ActorNode goalNode,
-                                  Map<MovieGraph.ActorNode, MovieGraph.ActorNode> previous,
-                                  Map<MovieGraph.ActorNode, String> movieEdge,
-                                  Map<MovieGraph.ActorNode, Double> movieRating) {
-        List<MovieGraph.ActorNode> path = new ArrayList<>();
-        List<String> movies = new ArrayList<>();
-        List<Double> ratings = new ArrayList<>();
+                                  Map<MovieGraph.ActorNode, MovieGraph.Edge> previous) {
+        List<String> path = new ArrayList<>();
+        MovieGraph.ActorNode current = goalNode;
 
-        MovieGraph.ActorNode node = goalNode;
-        while (node != null && node != startNode) {
-            path.add(node);
-            movies.add(movieEdge.get(node));
-            ratings.add(movieRating.get(node));
-            node = previous.get(node);
+        while (!current.equals(startNode)) {
+            MovieGraph.Edge edge = previous.get(current);
+            path.add("===[ " + edge.movieTitle + " (" + edge.rating + ") ] ===> " + current.name);
+            current = edge.actor1;
         }
+        path.add(startNode.name);
 
-        if (node == null) {
-            System.out.println("Ingen sti funnet.");
-            return;
-        }
-
-        path.add(startNode);
         Collections.reverse(path);
-        Collections.reverse(movies);
-        Collections.reverse(ratings);
 
-        Iterator<MovieGraph.ActorNode> pathIterator = path.iterator();
-        Iterator<String> movieIterator = movies.iterator();
-        Iterator<Double> ratingIterator = ratings.iterator();
-
-        MovieGraph.ActorNode actor = pathIterator.next();
-        System.out.print(actor.name);
-
-        while (pathIterator.hasNext()) {
-            String movie = movieIterator.next();
-            double rating = ratingIterator.next();
-            actor = pathIterator.next();
-            System.out.println();
-            System.out.print("===[ " + movie + " (" + rating + ") ]===> " + actor.name);
+        System.out.println("Korteste sti fra " + startNode.name + " til " + goalNode.name + ":");
+        for (String step : path) {
+            System.out.println(step);
         }
-        System.out.println();
     }
 
     public static void findShortestPath(MovieGraph movieGraph, String startActorID, String goalActorID) {
@@ -111,14 +86,12 @@ public class SixDegreesIMDB {
             return;
         }
 
-        Map<MovieGraph.ActorNode, MovieGraph.ActorNode> previous = new HashMap<>();
-        Map<MovieGraph.ActorNode, String> movieEdge = new HashMap<>();
-        Map<MovieGraph.ActorNode, Double> movieRating = new HashMap<>();
+        Map<MovieGraph.ActorNode, MovieGraph.Edge> previous = new HashMap<>();
 
-        BFSVisit(startNode, goalNode, previous, movieEdge, movieRating, movieGraph);
+        BFSVisit(startNode, goalNode, previous, movieGraph);
 
         if (previous.containsKey(goalNode)) {
-            printPath(startNode, goalNode, previous, movieEdge, movieRating);
+            printPath(startNode, goalNode, previous);
         } else {
             System.out.println("Ingen sti funnet mellom " + startNode.name + " og " + goalNode.name);
         }

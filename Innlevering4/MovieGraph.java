@@ -6,13 +6,11 @@ import java.util.*;
 public class MovieGraph {
     protected Map<String, ActorNode> actors;
     protected Map<String, Movie> movies;
-    protected List<Edge> edges;
 
     // Constructor
     public MovieGraph() {
         actors = new HashMap<>();
         movies = new HashMap<>();
-        edges = new ArrayList<>();
     }
 
     public ActorNode getActorNode(String actorID) {
@@ -42,32 +40,7 @@ public class MovieGraph {
         if (movie != null && actor != null) {
             actor.movies.add(movie);
             movie.actors.add(actor);
-
-            // Lag kanter mellom alle skuespillere i filmen.
-            for (ActorNode coActor : movie.actors) {
-                if (!coActor.id.equals(actorID)) {
-                    edges.add(new Edge(actor, coActor, movie.title, movie.rating));
-                }
-            }
         }
-    }
-
-    public int countNodes() {
-        return actors.size();
-    }
-
-    public int countEdges() {
-        return edges.size();
-    }
-
-    public List<Edge> getEdgesForActor(ActorNode actor) {
-        List<Edge> relevantEdges = new ArrayList<>();
-        for (Edge edge : edges) {
-            if (edge.actor1.equals(actor) || edge.actor2.equals(actor)) {
-                relevantEdges.add(edge);
-            }
-        }
-        return relevantEdges;
     }
 
     public void buildGraph(String moviesFile, String actorsFile) throws IOException {
@@ -100,6 +73,16 @@ public class MovieGraph {
                 }
             }
         }
+    }
+
+    // Count the number of edges in the graph
+    public int countEdges() {
+        int edges = 0;
+        for (Movie movie : movies.values()) {
+            int actorCount = movie.actors.size();
+            edges += actorCount * (actorCount - 1); // Complete bipartite connections
+        }
+        return edges / 2; // Each edge is counted twice
     }
 
     // Indre klasser
@@ -141,6 +124,11 @@ public class MovieGraph {
             this.movieTitle = movieTitle;
             this.rating = rating;
         }
+
+        @Override
+        public String toString() {
+            return actor1.name + " <===[ " + movieTitle + " (" + rating + ") ]===> " + actor2.name;
+        }
     }
 
     public static void main(String[] args) {
@@ -153,10 +141,8 @@ public class MovieGraph {
             return;
         }
 
-        int nodeCount = movieGraph.countNodes();
-        int edgeCount = movieGraph.countEdges();
-
-        System.out.println("Antall noder: " + nodeCount);
-        System.out.println("Antall kanter: " + edgeCount);
+        System.out.println("Oppgave 1");
+        System.out.println("Nodes: " + movieGraph.actors.size());
+        System.out.println("Edges: " + movieGraph.countEdges());
     }
 }
