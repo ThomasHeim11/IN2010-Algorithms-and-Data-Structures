@@ -7,7 +7,7 @@ public class MovieGraph {
     private Map<String, ActorNode> actors;
     private Map<String, Movie> movies;
 
-    // Konstruktør
+    // Constructor
     public MovieGraph() {
         actors = new HashMap<>();
         movies = new HashMap<>();
@@ -22,11 +22,15 @@ public class MovieGraph {
     }
 
     public void addActor(String actorID, String actorName) {
-        actors.putIfAbsent(actorID, new ActorNode(actorID, actorName));
+        if (!actors.containsKey(actorID)) {
+            actors.put(actorID, new ActorNode(actorID, actorName));
+        }
     }
 
     public void addMovie(String movieID, String title, double rating) {
-        movies.putIfAbsent(movieID, new Movie(movieID, title, rating));
+        if (!movies.containsKey(movieID)) {
+            movies.put(movieID, new Movie(movieID, title, rating));
+        }
     }
 
     public void addActorToMovie(String actorID, String movieID) {
@@ -54,7 +58,7 @@ public class MovieGraph {
     }
     
     public void buildGraph(String moviesFile, String actorsFile) throws IOException {
-        // Les films
+        // Read movies
         try (BufferedReader br = new BufferedReader(new FileReader(moviesFile))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -66,7 +70,7 @@ public class MovieGraph {
             }
         }
 
-        // Les skuespillere
+        // Read actors
         try (BufferedReader br = new BufferedReader(new FileReader(actorsFile))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -85,7 +89,7 @@ public class MovieGraph {
         }
     }
 
-    // Indre klasser for Actor og Movie
+    // Inner classes for Actor and Movie
     static class ActorNode {
         String id;
         String name;
