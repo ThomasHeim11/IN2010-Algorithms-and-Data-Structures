@@ -32,17 +32,17 @@ public class MovieGraph {
             movies.put(movieID, new Movie(movieID, title, rating));
         }
     }
-
+    // Legger til skuespiller til film. 
     public void addActorToMovie(String actorID, String movieID) {
         Movie movie = movies.get(movieID);
         ActorNode actor = actors.get(actorID);
-
+        // Hvis vi har en film og en skespiller. 
         if (movie != null && actor != null) {
             actor.movies.add(movie);
             movie.actors.add(actor);
         }
     }
-
+    // Bygger grafen. 
     public void buildGraph(String moviesFile, String actorsFile) throws IOException {
         // Les filmer
         try (BufferedReader br = new BufferedReader(new FileReader(moviesFile))) {
@@ -75,17 +75,17 @@ public class MovieGraph {
         }
     }
 
-    // Count the number of edges in the graph
+    // Teller antall kanter. 
     public int countEdges() {
         int edges = 0;
         for (Movie movie : movies.values()) {
             int actorCount = movie.actors.size();
-            edges += actorCount * (actorCount - 1); // Complete bipartite connections
+            edges += actorCount * (actorCount - 1); 
         }
-        return edges / 2; // Each edge is counted twice
+        return edges / 2; 
     }
 
-    // Indre klasser
+    // Indre klasser for skulespiller
     static class ActorNode {
         String id;
         String name;
@@ -97,7 +97,7 @@ public class MovieGraph {
             this.movies = new ArrayList<>();
         }
     }
-
+    // Inger node for film. 
     static class Movie {
         String id;
         String title;
@@ -111,7 +111,7 @@ public class MovieGraph {
             this.actors = new ArrayList<>();
         }
     }
-
+    // Indre klasse av kant
     static class Edge {
         ActorNode actor1;
         ActorNode actor2;
@@ -130,7 +130,7 @@ public class MovieGraph {
             return actor1.name + " <===[ " + movieTitle + " (" + rating + ") ]===> " + actor2.name;
         }
     }
-
+    // Hovedprogram som skriver ut antall noder og kanter. 
     public static void main(String[] args) {
         MovieGraph movieGraph = new MovieGraph();
 
