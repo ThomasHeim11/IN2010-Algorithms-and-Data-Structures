@@ -7,26 +7,26 @@ public class MovieGraph {
     protected Map<String, ActorNode> actors;
     protected Map<String, Movie> movies;
 
-    // Constructor
+    // Konstruktør 
     public MovieGraph() {
         actors = new HashMap<>();
         movies = new HashMap<>();
     }
-
+    // Henter skuespillenode. 
     public ActorNode getActorNode(String actorID) {
         return actors.get(actorID);
     }
-
+    // Henter en sammling av alle nodene av skuespillere. 
     public Collection<ActorNode> getAllActorNodes() {
         return actors.values();
     }
-
+    // Legger til skuspillere. 
     public void addActor(String actorID, String actorName) {
         if (!actors.containsKey(actorID)) {
             actors.put(actorID, new ActorNode(actorID, actorName));
         }
     }
-
+    // Legger til filmer. 
     public void addMovie(String movieID, String title, double rating) {
         if (!movies.containsKey(movieID)) {
             movies.put(movieID, new Movie(movieID, title, rating));

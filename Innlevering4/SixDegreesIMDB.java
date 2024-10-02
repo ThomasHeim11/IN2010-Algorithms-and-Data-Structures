@@ -12,6 +12,7 @@ public class SixDegreesIMDB {
             return;
         }
 
+        // Predefined queries to be tested
         String[][] queries = {
             {"nm2255973", "nm0000460", "Donald Glover", "Jeremy Irons"},
             {"nm0424060", "nm8076281", "Scarlett Johansson", "Emma Mackey"},
@@ -34,6 +35,12 @@ public class SixDegreesIMDB {
         Queue<MovieGraph.ActorNode> queue = new LinkedList<>();
         Set<MovieGraph.ActorNode> visited = new HashSet<>();
 
+        System.out.println("Starter BFS fra: " + startNode.name);
+        if(startNode.equals(goalNode)) {
+            System.out.println("Startnoden er måletoden.");
+            return;
+        }
+
         visited.add(startNode);
         queue.add(startNode);
 
@@ -47,6 +54,7 @@ public class SixDegreesIMDB {
                         previous.put(neighbor, new MovieGraph.Edge(currentNode, neighbor, movie.title, movie.rating));
 
                         if (neighbor.equals(goalNode)) {
+                            System.out.println("Målnode " + goalNode.name + " funnet.");
                             return;
                         }
 
@@ -55,6 +63,8 @@ public class SixDegreesIMDB {
                 }
             }
         }
+
+        System.out.println("Ingen sti funnet fra " + startNode.name + " til " + goalNode.name);
     }
 
     private static void printPath(MovieGraph.ActorNode startNode, MovieGraph.ActorNode goalNode,
@@ -75,6 +85,7 @@ public class SixDegreesIMDB {
         for (String step : path) {
             System.out.println(step);
         }
+        System.out.println(); // Add extra newline here for separation
     }
 
     public static void findShortestPath(MovieGraph movieGraph, String startActorID, String goalActorID) {
@@ -91,6 +102,7 @@ public class SixDegreesIMDB {
         BFSVisit(startNode, goalNode, previous, movieGraph);
 
         if (previous.containsKey(goalNode)) {
+            System.out.println("Korteste sti funnet!");
             printPath(startNode, goalNode, previous);
         } else {
             System.out.println("Ingen sti funnet mellom " + startNode.name + " og " + goalNode.name);
