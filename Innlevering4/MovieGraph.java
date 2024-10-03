@@ -34,7 +34,9 @@ public class MovieGraph {
     }
     // Legger til skuespiller til film. 
     public void addActorToMovie(String actorID, String movieID) {
+        // Henter film med gitt id. 
         Movie movie = movies.get(movieID);
+        // Hentr skuespiller basert på id. 
         ActorNode actor = actors.get(actorID);
         // Hvis vi har en film og en skespiller. 
         if (movie != null && actor != null) {
@@ -51,6 +53,7 @@ public class MovieGraph {
                 String[] fields = line.split("\t");
                 String movieID = fields[0];
                 String title = fields[1];
+                // Henter rating. 
                 double rating = Double.parseDouble(fields[2]);
                 addMovie(movieID, title, rating);
             }
@@ -59,6 +62,7 @@ public class MovieGraph {
         // Les skuespillere
         try (BufferedReader br = new BufferedReader(new FileReader(actorsFile))) {
             String line;
+            // Leser hver linje og henter skuespiller. 
             while ((line = br.readLine()) != null) {
                 String[] fields = line.split("\t");
                 String actorID = fields[0];
@@ -74,14 +78,17 @@ public class MovieGraph {
             }
         }
     }
-    //@audit kommenter. 
     // Teller antall kanter. 
     public int countEdges() {
         int edges = 0;
+        // Går gjennom alle filmene. 
         for (Movie movie : movies.values()) {
+            // Antall skespillere i en film. 
             int actorCount = movie.actors.size();
+            // For hver skiespiller, beregn potensielle kanter.
             edges += actorCount * (actorCount - 1); 
         }
+        // Deler med 2 siden hver kant telles to ganger. 
         return edges / 2; 
     }
 
@@ -132,6 +139,7 @@ public class MovieGraph {
     }
     // Hovedprogram som skriver ut antall noder og kanter. 
     public static void main(String[] args) {
+        // Oppretter en graf og leser inn filene. 
         MovieGraph movieGraph = new MovieGraph();
 
         try {
