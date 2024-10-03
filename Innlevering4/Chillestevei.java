@@ -3,24 +3,33 @@ import java.util.*;
 // Jeg bruker Dijkstra for å finne chilleste vei. 
 public class Chillestevei{
     public static void finnChillesteVei(MovieGraph movieGraph, String startSkuespillerID,String målSkuespillerID){
+        // Mål og startnode fra grafen. 
         MovieGraph.ActorNode startNode = movieGraph.getActorNode(startSkuespillerID);
         MovieGraph.ActorNode målNode = movieGraph.getActorNode(målSkuespillerID);
 
         if(startNode == null || målNode == null){
             System.out.println("Skespiller ikke funnet");
-            // return;
+            return;
         }
+        // En prioritetskø for å ta hånd av noder som sakl behandles basert på avstand. 
         PriorityQueue<SkuespillerNodeWrapper> prioritetskø = new PriorityQueue<>(new SkuespillerNodeComparator());
+        //Holder styr på korteste avstand mellom nodene. 
         Map<MovieGraph.ActorNode,Double> avstander = new HashMap<>();
+        // Veien fra tidligere noder. 
         Map<MovieGraph.ActorNode,MovieGraph.Edge> tidligere = new HashMap<>();
 
+        // Initialiserer alle avstander til uendelig. 
         for(MovieGraph.ActorNode skuespiller: movieGraph.getAllActorNodes()){
             avstander.put(skuespiller,Double.MAX_VALUE);
         }
+        // Avtanden til startnoden settes til 0. 
         avstander.put(startNode,0.0);
+        // Legger startnoden i prioritetskøen. 
         prioritetskø.add(new SkuespillerNodeWrapper(startNode,0.0));
 
+        // Så lenge prioritetskøa ikke er tom. 
         while(!prioritetskø.isEmpty()){
+            // Behandler nodeen med den minste avstanden. 
             SkuespillerNodeWrapper nåværendeWrapper = prioritetskø.poll();
             MovieGraph.ActorNode nåværendeNode = nåværendeWrapper.node;
 
@@ -72,7 +81,7 @@ public class Chillestevei{
                 nåværende = kant.actor1;
             }
             sti.add(startNode.name);
-            Collection.reverse(sti);
+            Collections.reverse(sti);
 
             for(String steg : sti){
                 System.out.println(steg);
