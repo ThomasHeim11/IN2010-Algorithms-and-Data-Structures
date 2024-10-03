@@ -29,18 +29,21 @@ public class Chillestevei{
 
         // Så lenge prioritetskøa ikke er tom. 
         while(!prioritetskø.isEmpty()){
-            // Behandler nodeen med den minste avstanden. 
+            // Behandler noden med den minste avstanden. 
             SkuespillerNodeWrapper nåværendeWrapper = prioritetskø.poll();
             MovieGraph.ActorNode nåværendeNode = nåværendeWrapper.node;
-
+            // Stopper hvis målnoden er nådd. 
             if (nåværendeNode.equals(målNode)) break;
 
+            // Går gjennom alle filmer den nåværende skuespiller har vært i. 
             for(MovieGraph.Movie film: nåværendeNode.movies){
                 for(MovieGraph.ActorNode nabo : film.actors){
                     if(nåværendeNode.equals(nabo)) continue;
 
+                    // Beregner den nye avstanden til nabonoden. 
                     double nyAvstand = avstander.get(nåværendeNode) + (10-film.rating);
                     if(nyAvstand < avstander.get(nabo)){
+                        // Hvis avstanden er kortere, oppdaterer avstanden og veien. 
                         avstander.put(nabo, nyAvstand);
                         tidligere.put(nabo, new MovieGraph.Edge(nåværendeNode,nabo,film.title,film.rating));
                         prioritetskø.add(new SkuespillerNodeWrapper(nabo,nyAvstand));
@@ -49,12 +52,14 @@ public class Chillestevei{
             }
         }
         if(tidligere.containsKey(målNode)){
+            // Hvis en vei til mål-noden er funnet ,skriv ut veien og total avstand. 
             double totalVekt = avstander.get(målNode);
             skrivUtChillesteVei(startNode,målNode,tidligere,totalVekt);
         } else{
             System.out.println("Ingen sti funnet mellom " + startNode.name + " og " + målNode.name);
         }
     }
+    // Hjelpeklasse som holder styr på skespiller og avstand. 
     static class SkuespillerNodeWrapper{
         MovieGraph.ActorNode node;
         double avstand;
@@ -64,12 +69,15 @@ public class Chillestevei{
             this.avstand = avstand;
         }
     }
+    // Hjelpeklasse som sammenligner SkuespillernodeWrapper-objekter basert på avstand. 
     static  class SkuespillerNodeComparator implements Comparator<SkuespillerNodeWrapper>{
         @Override
         public int compare(SkuespillerNodeWrapper o1, SkuespillerNodeWrapper o2){
             return Double.compare(o1.avstand, o2.avstand);
         }
-    }
+    }   
+
+        // Metode for å skrive ut veien til mål node. 
         private static void skrivUtChillesteVei(MovieGraph.ActorNode startNode, MovieGraph.ActorNode målNode,
                                             Map<MovieGraph.ActorNode, MovieGraph.Edge> tidligere, double totalVekt) {
             List<String> sti = new ArrayList<>();
@@ -88,7 +96,9 @@ public class Chillestevei{
             }
             System.out.println("Total vekt: " + totalVekt);
 }
+    // Main som kjører programmet. 
     public static void main(String[] args) {
+        // Lager en movie graf og leser inn filene. 
         MovieGraph movieGraph = new MovieGraph();
         try {
             movieGraph.buildGraph("movies.tsv", "actors.tsv");
@@ -96,7 +106,7 @@ public class Chillestevei{
             e.printStackTrace();
             return;
         }
-
+        // Array med skulespillers navn og id..
         String[][] spørringer = {
             {"nm2255973", "nm0000460", "Donald Glover", "Jeremy Irons"},
             {"nm0424060", "nm8076281", "Scarlett Johansson", "Emma Mackey"},

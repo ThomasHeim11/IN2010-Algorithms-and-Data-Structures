@@ -74,7 +74,7 @@ public class MovieGraph {
             }
         }
     }
-
+    //@audit kommenter. 
     // Teller antall kanter. 
     public int countEdges() {
         int edges = 0;
