@@ -8,7 +8,7 @@ public class Chillestevei{
         MovieGraph.ActorNode målNode = movieGraph.getActorNode(målSkuespillerID);
 
         if(startNode == null || målNode == null){
-            System.out.println("Skespiller ikke funnet");
+            System.out.println("Skuespiller ikke funnet");
             return;
         }
         // En prioritetskø for å ta hånd av noder som sakl behandles basert på avstand. 
@@ -82,15 +82,16 @@ public class Chillestevei{
                                             Map<MovieGraph.ActorNode, MovieGraph.Edge> tidligere, double totalVekt) {
             List<String> sti = new ArrayList<>();
             MovieGraph.ActorNode nåværende = målNode;
-            
+            // Rekonsturer vien bakover fra målnoden til startnoden:    
             while(!nåværende.id.equals(startNode.id)){
                 MovieGraph.Edge kant = tidligere.get(nåværende);
                 sti.add("===[ " + kant.movieTitle + " (" + kant.rating + ") ] ===> " + nåværende.name);
                 nåværende = kant.actor1;
             }
             sti.add(startNode.name);
+            // Reverserer listen for å få veien fra start til mål
             Collections.reverse(sti);
-
+            // Skiver ut veien. 
             for(String steg : sti){
                 System.out.println(steg);
             }

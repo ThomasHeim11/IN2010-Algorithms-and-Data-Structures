@@ -2,31 +2,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class SixDegreesIMDB {
-    public static void main(String[] args) {
-        MovieGraph movieGraph = new MovieGraph();
-        // Bygger opp grafen fra filen med filmer og skespillere. 
-        try {
-            movieGraph.buildGraph("movies.tsv", "actors.tsv");
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-        // Streger som som skal testes. Samme som fra eksmpelet i oppgaven. 
-        String[][] queries = {
-            {"nm2255973", "nm0000460", "Donald Glover", "Jeremy Irons"},
-            {"nm0424060", "nm8076281", "Scarlett Johansson", "Emma Mackey"},
-            {"nm4689420", "nm0000365", "Carrie Coon", "Julie Delpy"},
-            {"nm0000288", "nm2143282", "Christian Bale", "Lupita Nyong'o"},
-            {"nm0637259", "nm0931324", "Tuva Novotny", "Michael K. Williams"}
-        };
-
-        System.out.println("Oppgave 2");
-        for (String[] query : queries) {
-            System.out.println(query[2] + " til " + query[3] + ":");
-            findShortestPath(movieGraph, query[0], query[1]);
-            System.out.println();
-        }
-    }
+    
 // BFS-algoritme for å finne den korteste stien fra startnoden til målnoden. 
     private static void BFSVisit(MovieGraph.ActorNode startNode, MovieGraph.ActorNode goalNode,
                                  Map<MovieGraph.ActorNode, MovieGraph.Edge> previous,
@@ -101,7 +77,6 @@ public class SixDegreesIMDB {
             System.out.println("Skuespiller ikke funnet");
             return;
         }
-
         Map<MovieGraph.ActorNode, MovieGraph.Edge> previous = new HashMap<>();
         // Utfør BFS for å finne den korteste stien. 
         BFSVisit(startNode, goalNode, previous, movieGraph);
@@ -111,6 +86,31 @@ public class SixDegreesIMDB {
             printPath(startNode, goalNode, previous);
         } else {
             System.out.println("Ingen sti funnet mellom " + startNode.name + " og " + goalNode.name);
+        }
+    }
+    public static void main(String[] args) {
+        MovieGraph movieGraph = new MovieGraph();
+        // Bygger opp grafen fra filen med filmer og skuespillere. 
+        try {
+            movieGraph.buildGraph("movies.tsv", "actors.tsv");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        // Streger som som skal testes. Samme som fra eksmpelet i oppgaven. 
+        String[][] queries = {
+            {"nm2255973", "nm0000460", "Donald Glover", "Jeremy Irons"},
+            {"nm0424060", "nm8076281", "Scarlett Johansson", "Emma Mackey"},
+            {"nm4689420", "nm0000365", "Carrie Coon", "Julie Delpy"},
+            {"nm0000288", "nm2143282", "Christian Bale", "Lupita Nyong'o"},
+            {"nm0637259", "nm0931324", "Tuva Novotny", "Michael K. Williams"}
+        };
+
+        System.out.println("Oppgave 2");
+        for (String[] query : queries) {
+            System.out.println(query[2] + " til " + query[3] + ":");
+            findShortestPath(movieGraph, query[0], query[1]);
+            System.out.println();
         }
     }
 }
