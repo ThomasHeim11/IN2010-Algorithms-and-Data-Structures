@@ -27,7 +27,7 @@ public class SixDegreesIMDB {
             System.out.println();
         }
     }
-// BFS-algoritme for å finne den korteste stien fra starnode til målnode. 
+// BFS-algoritme for å finne den korteste stien fra startnoden til målnoden. 
     private static void BFSVisit(MovieGraph.ActorNode startNode, MovieGraph.ActorNode goalNode,
                                  Map<MovieGraph.ActorNode, MovieGraph.Edge> previous,
                                  MovieGraph graph) {
@@ -40,8 +40,9 @@ public class SixDegreesIMDB {
             System.out.println("Startnoden er måletoden.");
             return;
         }
-
+        // Marker startnoden som besøkt. 
         visited.add(startNode);
+        // legg en startnode i køen. 
         queue.add(startNode);
         // så lenge køen ikke er tom. 
         while (!queue.isEmpty()) {
@@ -49,8 +50,11 @@ public class SixDegreesIMDB {
         // Utforske alle naboene til den nåværende noden. 
             for (MovieGraph.Movie movie : currentNode.movies) {
                 for (MovieGraph.ActorNode neighbor : movie.actors) {
+                    // Hvis naboen ikke er besøkt. 
                     if (!visited.contains(neighbor)) {
+                        // Marker naboeb som besøkt. 
                         visited.add(neighbor);
+                        // Oppdaterer veien til naboen. 
                         previous.put(neighbor, new MovieGraph.Edge(currentNode, neighbor, movie.title, movie.rating));
                         // Sjekker om naboeben er målnoden. 
                         if (neighbor.equals(goalNode)) {
@@ -77,15 +81,16 @@ public class SixDegreesIMDB {
             path.add("===[ " + edge.movieTitle + " (" + edge.rating + ") ] ===> " + current.name);
             current = edge.actor1;
         }
+        // Legg til startnode. 
         path.add(startNode.name);
-
+        // Reverserer stien for rikitg rekkefølge. 
         Collections.reverse(path);
 
         System.out.println("Korteste sti fra " + startNode.name + " til " + goalNode.name + ":");
         for (String step : path) {
             System.out.println(step);
         }
-        System.out.println(); // Add extra newline here for separation
+        System.out.println();
     }
 
     public static void findShortestPath(MovieGraph movieGraph, String startActorID, String goalActorID) {

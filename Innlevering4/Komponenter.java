@@ -1,7 +1,7 @@
 import java.io.IOException;
 import java.util.*;
 
-// Hovedklasse for å finne størrelsen på komponenter i en urettet graf
+// Hovedklasse for å finne størrelsen på komponenter i en DAG. 
 public class Komponenter {
 
     public static void main(String[] args) {
