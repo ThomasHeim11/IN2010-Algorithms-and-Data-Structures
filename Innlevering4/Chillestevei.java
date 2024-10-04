@@ -59,7 +59,7 @@ public class Chillestevei{
             System.out.println("Ingen sti funnet mellom " + startNode.name + " og " + målNode.name);
         }
     }
-    // Hjelpeklasse som holder styr på skespiller og avstand. 
+    // Hjelpeklasse som holder styr på skuespiller og avstand. 
     static class SkuespillerNodeWrapper{
         MovieGraph.ActorNode node;
         double avstand;

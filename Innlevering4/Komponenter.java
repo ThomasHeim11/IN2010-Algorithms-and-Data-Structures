@@ -29,7 +29,7 @@ public class Komponenter {
             // Hvis noden ikke er besøkt, utfører vi en bredde-først søk (BFS) fra denne noden
             if (!besøkede.contains(node)) {
                 int størrelse = bfs(node, besøkede);
-                // Oppdater kartet med størrelsen på komponenten
+                // Oppdater størrelsen på komponenten. 
                 if (komponentStørrelser.containsKey(størrelse)) {
                     komponentStørrelser.put(størrelse, komponentStørrelser.get(størrelse) + 1);
                 } else {
