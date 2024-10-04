@@ -6,7 +6,7 @@ public class Chillestevei{
         // Mål og startnode fra grafen. 
         MovieGraph.ActorNode startNode = movieGraph.getActorNode(startSkuespillerID);
         MovieGraph.ActorNode målNode = movieGraph.getActorNode(målSkuespillerID);
-        // SJekker at vi har start og målnode. 
+        // Sjekker at vi har start og målnode. 
         if(startNode == null || målNode == null){
             System.out.println("Skuespiller ikke funnet");
             return;
@@ -22,12 +22,12 @@ public class Chillestevei{
         for(MovieGraph.ActorNode skuespiller: movieGraph.getAllActorNodes()){
             avstander.put(skuespiller,Double.MAX_VALUE);
         }
-        // Avtanden til startnoden settes til 0. 
+        // Avstanden til startnoden settes til 0. 
         avstander.put(startNode,0.0);
         // Legger startnoden i prioritetskøen. 
         prioritetskø.add(new SkuespillerNodeWrapper(startNode,0.0));
 
-        // Så lenge prioritetskøa ikke er tom. 
+        // Så lenge prioritetskø ikke er tom. 
         while(!prioritetskø.isEmpty()){
             // Behandler noden med den minste avstanden. 
             SkuespillerNodeWrapper nåværendeWrapper = prioritetskø.poll();
