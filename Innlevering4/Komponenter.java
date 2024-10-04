@@ -7,19 +7,16 @@ public class Komponenter {
     public static void main(String[] args) {
         // Oppretter en ny instans av MovieGraph
         MovieGraph movieGraph = new MovieGraph();
-
-        // Bygger grafen ved å lese data fra oppgitte filer
+        // Bygger grafen ved å lese data fra  filer
         try {
             movieGraph.buildGraph("movies.tsv", "actors.tsv");
         } catch (IOException e) {
             e.printStackTrace();
             return;
         }
-
-        // Kaller metode for å finne komponentstørrelser
+        // Kaller metode for å finne størrele på komponenter.
         finnKomponenter(movieGraph);
     }
-
     // Metoden for å finne og telle komponenter av ulike størrelser i grafen
     public static void finnKomponenter(MovieGraph movieGraph) {
         // Sett for å holde styr på besøkte noder
@@ -75,7 +72,6 @@ public class Komponenter {
                 }
             }
         }
-
         // Returnerer størrelsen på komponenten funnet
         return størrelse;
     }

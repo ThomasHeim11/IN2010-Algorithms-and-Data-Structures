@@ -32,7 +32,7 @@ public class SixDegreesIMDB {
                         visited.add(neighbor);
                         // Oppdaterer veien til naboen. 
                         previous.put(neighbor, new MovieGraph.Edge(currentNode, neighbor, movie.title, movie.rating));
-                        // Sjekker om naboeben er målnoden. 
+                        // Sjekker om naboe er målnoden. 
                         if (neighbor.equals(goalNode)) {
                             System.out.println("Målnode " + goalNode.name + " funnet.");
                             return;
