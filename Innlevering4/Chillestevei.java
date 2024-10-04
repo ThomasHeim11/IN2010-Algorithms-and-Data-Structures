@@ -6,7 +6,7 @@ public class Chillestevei{
         // Mål og startnode fra grafen. 
         MovieGraph.ActorNode startNode = movieGraph.getActorNode(startSkuespillerID);
         MovieGraph.ActorNode målNode = movieGraph.getActorNode(målSkuespillerID);
-
+        // SJekker at vi har start og målnode. 
         if(startNode == null || målNode == null){
             System.out.println("Skuespiller ikke funnet");
             return;

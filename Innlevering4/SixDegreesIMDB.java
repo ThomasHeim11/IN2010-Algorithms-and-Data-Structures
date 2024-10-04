@@ -97,7 +97,7 @@ public class SixDegreesIMDB {
             e.printStackTrace();
             return;
         }
-        // Streger som som skal testes. Samme som fra eksmpelet i oppgaven. 
+        // Streger som som skal testes. Samme som fra eksemplet i oppgaven. 
         String[][] queries = {
             {"nm2255973", "nm0000460", "Donald Glover", "Jeremy Irons"},
             {"nm0424060", "nm8076281", "Scarlett Johansson", "Emma Mackey"},
