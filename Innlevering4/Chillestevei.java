@@ -1,3 +1,5 @@
+// skriv d for 4.2d
+
 import java.io.IOException;
 import java.util.*;
 // Jeg bruker Dijkstra for å finne chilleste vei. 
