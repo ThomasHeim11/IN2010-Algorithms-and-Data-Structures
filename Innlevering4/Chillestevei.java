@@ -97,7 +97,9 @@ public class Chillestevei{
             for(String steg : sti){
                 System.out.println(steg);
             }
-            System.out.println("Total vekt: " + totalVekt);
+            //@audit
+            System.out.println("Total vekt: " + String.format("%.1f", totalVekt));
+
 }
     // Main som kjører programmet. 
     public static void main(String[] args) {
