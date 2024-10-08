@@ -1,7 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-
+// Oppgave 1
 // Oppretter en trestruktur for sett.
 class TreeNode {
     int x;

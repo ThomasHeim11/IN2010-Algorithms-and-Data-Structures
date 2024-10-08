@@ -1,0 +1,32 @@
+ALGORITHM: Balansert BST med bruka av Heap
+Input: En heap (PriorityQueue) med tall
+Output: Tallene skrevet ut i balansert rekkefølge
+
+Procedure printBalancedOrder(heap)
+    printBalanceOrderHelper(heap, |heap|)
+
+Procedure printBalancedOrderHelper(heap,size)
+    if size = 0 or heap isEmpty then
+        return
+    
+    midIndex <- size/2
+
+    leftHeap ← new PriorityQueue()
+    rightHeap ← new PriorityQueue()
+
+    count <- 0
+    while count < size do
+        elem <- removeMin(heap)
+        if count < midIndex then
+            insert(leftHeap,elem)
+        else if count = midindex then
+            print(elem)
+        else
+            rightHeap.offer(elem)
+        count <- count + 1
+
+        printBalancedOrderHelper(leftHeap, |leftHeap|)
+        printBalancedOrderHelper(rightHeap, |rightHeap|)
+    
+
+

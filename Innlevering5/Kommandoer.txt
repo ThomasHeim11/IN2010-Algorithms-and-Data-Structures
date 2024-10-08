@@ -1,0 +1,9 @@
+## Oppgave 2
+-  java  Oppgave2a <filnavn>
+
+- java Oppgave2b <filnavn>
+
+## Oppgave 3
+- java Oppgave3 <filnavn>
+
+## Oppgave 4
