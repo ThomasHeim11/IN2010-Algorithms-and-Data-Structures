@@ -7,3 +7,5 @@
 - java Oppgave3 <filnavn>
 
 ## Oppgave 4
+- java MovieGraph
+- java SixDegreesIMDB

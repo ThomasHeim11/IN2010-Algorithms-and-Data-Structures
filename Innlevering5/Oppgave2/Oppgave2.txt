@@ -1,0 +1,54 @@
+Oppgave2a)
+
+ALGORITHM: Balanser BST og Post-ordre Traversal
+Input: En tekstfil med et sorter array av tall 
+Output: Elementene skrevet ut i post-order rekkefølge
+
+Procedure printBalancedOrder(numbers)
+    printBalancedOrderHelper(numbers, 0, LENGTH(numbers) - 1)
+
+Procedure printBalancedOrderHelper(numbers, start, end)
+    if start > end then
+        return
+    mid <- (start + end) / 2
+
+    PRINT numbers[mid]
+    printBalancedOrderHelper(numbers, mid + 1, end)
+    printBalancedOrderHelper(numbers, start, mid - 1)
+   
+
+Oppgave 2b)
+
+ALGORITHM: Balansert BST med bruka av Heap
+Input: En heap (PriorityQueue) med tall
+Output: Tallene skrevet ut i balansert rekkefølge
+
+Procedure printBalancedOrder(heap)
+    printBalanceOrderHelper(heap, |heap|)
+
+Procedure printBalancedOrderHelper(heap,size)
+    if size = 0 or heap isEmpty then
+        return
+    
+    midIndex <- size/2
+
+    leftHeap ← new PriorityQueue()
+    rightHeap ← new PriorityQueue()
+
+    count <- 0
+    while count < size do
+        elem <- removeMin(heap)
+        if count < midIndex then
+            insert(leftHeap,elem)
+        else if count = midindex then
+            print(elem)
+        else
+            rightHeap.offer(elem)
+        count <- count + 1
+
+        printBalancedOrderHelper(leftHeap, |leftHeap|)
+        printBalancedOrderHelper(rightHeap, |rightHeap|)
+    
+
+
+
